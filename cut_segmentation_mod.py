@@ -21,40 +21,22 @@ logger.setLevel(DEBUG)
 logger.addHandler(handler)
 logger.propagate = False
 
-def dest_folder_create(destination_path):
+def dest_folder_create(dest_path):
     """
     保存先フォルダを作成する関数
 
     Parameters
     ----------
-    destination_path : str
+    dest_path : str
         保存先フォルダのパス
     """
     # 保存先フォルダの作成
     # 既に存在する場合は削除
-    if os.path.exists(destination_path):
-        shutil.rmtree(destination_path)    # フォルダ削除
-    os.mkdir(destination_path)     # 保存先フォルダの作成
-
-def graph_show(data):
-    """
-    変化割合のグラフを表示する関数
-
-    Parameters
-    ----------
-    data : numpy.ndarray
-        変化割合
-    """
-    fig = plt.figure(figsize=(10, 5))
-    plt.plot(data)                           
-    plt.title('Graph of Cut Change Detection')      # タイトル
-    plt.xlabel('frame')                             # X軸ラベル
-    plt.ylabel('Diff Rate')                         # Y軸ラベル
-    plt.grid(True)                                  # グリッドあり
-    plt.axhline(85, color='red')           # カットするラインを描画
-    plt.show() # グラフ描画
+    if os.path.exists(dest_path):
+        shutil.rmtree(dest_path)    # フォルダ削除
+    os.mkdir(dest_path)     # 保存先フォルダの作成
     
-def graph_save(data, destination_path):
+def graph_save(data, dest_path):
     """
     変化割合のグラフを保存する関数
 
@@ -63,7 +45,7 @@ def graph_save(data, destination_path):
     data : numpy.ndarray
         変化割合
 
-    destination_path : str
+    dest_path : str
         保存先フォルダのパス
     """
     fig = plt.figure(figsize=(10, 5))
@@ -75,7 +57,7 @@ def graph_save(data, destination_path):
     plt.axhline(85, color='red')           # カットするラインを描画
     #plt.show() # グラフ描画
     
-    plt.savefig(destination_path + '\\change_rate_graph.jpg') # 保存
+    plt.savefig(dest_path + '\\change_rate_graph.jpg') # 保存
 
 def MSE(diff): 
     """
@@ -198,7 +180,7 @@ def color_histogram_comp(img1, img2, THRESHOLD, need_mask=False):
     THRESHOLD : float
         使用する閾値
 
-    need_mask : bool
+    need_mask : bool, default False
         マスク画像を適用するかどうか
 
     Returns
@@ -283,7 +265,7 @@ def incorrect_cut_point_delete_by_color_histogram(cut_point, frames):
         カット点（のフレーム番号リスト）
 
     frames : numpy.ndarray
-        動画の全画像データ（フレーム）
+        フレームデータ（動画の全画像データ）
 
     Returns
     -------
@@ -322,7 +304,7 @@ def flash_frame_delete(cut_point, frames):
         カット点（のフレーム番号リスト）
 
     frames : numpy.ndarray
-        動画の全画像データ（フレーム）
+        フレームデータ（動画の全画像データ）
 
     Returns
     -------
@@ -363,9 +345,6 @@ def effect_frame_delete(cut_point, frames):
         次のカット点から幅5フレーム分の画像を取得する
         該当カット点の画像と取得した5つの画像で輝度ヒストグラムの類似度を算出（5回分）
         類似度が閾値以上の時、エフェクトの可能性があるのでカット点から削除
-        #TODO 類似度が閾値以上 かつ それが3回以上超えた場合フラッシュの可能性があるのでカット点から削除
-
-        フラッシュは中央以外の場所でも起きるため、ヒストグラム作成時のマスク画像は適用しない
     
     Parameters
     ----------
@@ -373,7 +352,7 @@ def effect_frame_delete(cut_point, frames):
         カット点（のフレーム番号リスト）
 
     frames : numpy.ndarray
-        動画の全画像データ（フレーム）
+        フレームデータ（動画の全画像データ）
 
     Returns
     -------
@@ -404,10 +383,23 @@ def effect_frame_delete(cut_point, frames):
 
 def read_video_data(input_video_path):
     """
-    docstring
+    動画を読み込み、フレームデータと動画情報を抽出する関数
+
+    Parameters
+    ----------
+    input_video_path : str
+        動画の入力パス   
+
+    Returns
+    -------
+    frames : numpy.ndarray
+        フレームデータ（動画の全画像データ）
+    
+    video_info : list 
+        動画データ [fps, width, height]
     """
     # --------------------------------------------------
-    # 1. 動画の読み込み
+    # 動画の読み込み
     # --------------------------------------------------
     cap = cv2.VideoCapture(input_video_path)     
     # ビデオキャプチャーが開けていない場合、例外を返す
@@ -421,7 +413,7 @@ def read_video_data(input_video_path):
     sec = frame_count / fps                         # 秒数
     
     # --------------------------------------------------
-    # 2. フレーム毎の画像情報をリストに格納
+    # フレーム毎の画像情報をリストに格納
     # --------------------------------------------------
     n_frames = int(frame_count) # 総フレーム数 
     frames = []
@@ -449,22 +441,19 @@ def cut_point_detect(frames):
     """
     カット点を検出して、返す関数
     [手順]
-    1. 動画の読み込み
-    2. フレーム毎の画像情報をリストに格納
-    3. 隣接フレーム間で差分画像を作成
-    4. 変化割合を算出
-    5. 変化割合が閾値以上の時、カット点として抽出
-
-    6. 段階的なカット点の修正
-        6-1 カット間フレーム（不要フレーム）を削除
-        6-2 輝度ヒストグラムで誤ったカット点を削除
-        6-3 フラッシュ検出による誤ったカット点を削除
-        6-4 エフェクト検出による誤ったカット点を削除
+    1. 隣接フレーム間で差分画像を作成
+    2. 変化割合を算出
+    3. 変化割合が閾値以上の時、カット点として抽出
+    4. 段階的なカット点の修正
+        4-1 カット間フレーム（不要フレーム）を削除
+        4-2 輝度ヒストグラムで誤ったカット点を削除
+        4-3 フラッシュ検出による誤ったカット点を削除
+        4-4 エフェクト検出による誤ったカット点を削除
 
     Parameters
     ----------
-    video_id : str
-        動画ID、入力元を識別するために使用  
+    frames : numpy.ndarray
+        フレームデータ（動画の全画像データ） 
 
     Returns
     -------
@@ -473,17 +462,17 @@ def cut_point_detect(frames):
 
     """
     # --------------------------------------------------
-    # 3. 隣接フレーム間で差分画像を作成
+    # 1. 隣接フレーム間で差分画像を作成
     # --------------------------------------------------
     diff_images = [aft - bef for bef, aft in zip(frames, frames[1:])]   # 差分画像
 
     # --------------------------------------------------
-    # 4. 変化割合を算出
+    # 2. 変化割合を算出
     # --------------------------------------------------
     diff_rates = [MSE(d) for d in diff_images]  # 差分画像のMSEを変化割合とする
     
     # --------------------------------------------------
-    # 5. 変化割合が閾値以上の時、カット点として抽出する 
+    # 3. 変化割合が閾値以上の時、カット点として抽出する 
     # --------------------------------------------------
     cut_point = []    # カット点のフレーム番号リスト
     for i in range(len(diff_images)):
@@ -492,18 +481,18 @@ def cut_point_detect(frames):
             cut_point.append(i)   # リストに追加
 
     # --------------------------------------------------
-    # 6. 段階的なカット点の修正
+    # 4. 段階的なカット点の修正
     #--------------------------------------------------
-    # 6-1 カット間フレーム（不要フレーム）を削除
+    # 4-1 カット間フレーム（不要フレーム）を削除
     cut_point = cut_between_frame_delete(cut_point, diff_images)
 
-    # 6-2 輝度ヒストグラムの類似度による誤ったカット点を削除
+    # 4-2 輝度ヒストグラムの類似度による誤ったカット点を削除
     cut_point = incorrect_cut_point_delete_by_color_histogram(cut_point, frames) 
 
-    # 6-3 フラッシュ検出による誤ったカット点を削除
+    # 4-3 フラッシュ検出による誤ったカット点を削除
     cut_point = flash_frame_delete(cut_point, frames)
 
-    # 6-4 エフェクト検出による誤ったカット点を削除
+    # 4-4 エフェクト検出による誤ったカット点を削除
     cut_point = effect_frame_delete(cut_point, frames)
     
     cut_point.append(len(frames) - 1) # 動画の最後のフレームインデックスを追加
@@ -512,8 +501,28 @@ def cut_point_detect(frames):
 
 def cut_save(video_id, cut_point, frames, video_info, dest_path):
     """
+    動画を分割して保存する関数
+
+    Parameters
+    ----------
+    video_id : str
+        フレームデータ（動画の全画像データ） 
+
+    cut_point : list
+        カット検出点（フレーム番号）のリスト
     
+    frames : numpy.ndarray
+        フレームデータ（動画の全画像データ） 
+    
+    video_info : list 
+        動画データ [fps, width, height]
+    
+    dest_path : str
+        保存先フォルダのパス
     """
+    # --------------------------------------------------
+    # カット分割・保存
+    # --------------------------------------------------
     fps, width, height = video_info # 動画情報の展開
 
     fourcc = cv2.VideoWriter_fourcc('m','p','4','v')    # 動画の保存形式
@@ -528,39 +537,39 @@ def cut_save(video_id, cut_point, frames, video_info, dest_path):
         for j in range(begin, cut_point[i]+1):
             writer[i].write(frames[j])
         begin = cut_point[i]+1
+
     logger.debug(video_id + '_cut～' + str(cut_count) + 'を保存しました')
     logger.debug('保存先 : ' + dest_path)
     logger.debug('-------------------------------------')
 
+    # --------------------------------------------------
     # 変化割合グラフを保存
-    # graph_save(diff_rates, destination_path)
+    # --------------------------------------------------
+    # diff_images = [aft - bef for bef, aft in zip(frames, frames[1:])]   # 差分画像
+    # diff_rates = [MSE(d) for d in diff_images]  # 差分画像のMSEを変化割合とする
+    # graph_save(frames, dest_path)
 
 def cut_segmentation(video_path, result_path):
     """
     カット分割を行い、各カットをフォルダに保存する関数
-    以下の流れ
     
-    フォルダの作成
-    カット点検出
+    以下の流れで行う
+    
+    動画IDリストの作成
     カット分割
-    カット保存
+        保存先フォルダの作成 
+        動画の読み込み、フレームデータ，動画情報の抽出
+        カット点の検出
+        カットの保存
 
-    TODO
     Parameters
     ----------
-    video_id : str
-        動画ID、入力元を識別するために使用  
+    video_path : str
+        入力する動画データのフォルダパス
 
-    Returns
-    -------
-    cut_point : list
-        カット検出点（フレーム番号）のリスト 
+    result_path
+        カット分割結果を保存するフォルダパス
     """
-    # --------------------------------------------------
-    # 閾値の設定
-    # --------------------------------------------------
-    #CUT_THRESHOLD, CUT_BETWEEN_THRESHOLD, HIST_THRESHOLD = thresholds        # 閾値
-
     # --------------------------------------------------
     # 動画IDリストの作成
     # --------------------------------------------------
@@ -570,26 +579,27 @@ def cut_segmentation(video_path, result_path):
     # --------------------------------------------------
     # カット分割
     # --------------------------------------------------
-    for video_id in video_id_list[:3]:
+    for video_id in video_id_list:
         input_video_path = video_path + '\\' + video_id + '.mp4' # 動画ファイルの入力パス 
-
+        
+        # --------------------------------------------------
         # 保存先フォルダの作成
+        # --------------------------------------------------
         dest_path = os.path.join(result_path, video_id) # 各動画のカット分割結果の格納先
         dest_folder_create(dest_path)   # フォルダ作成 
-
-        # 動画の読み込み、フレーム情報とを抽出
+        # --------------------------------------------------
+        # 動画の読み込み、フレームデータと動画情報を抽出
+        # --------------------------------------------------
         frames, video_info = read_video_data(input_video_path)
-
+        # --------------------------------------------------
         # カット点の検出
+        # --------------------------------------------------
         cut_point = cut_point_detect(frames)
         print(video_id, cut_point)
- 
+        # --------------------------------------------------
         # カット点の情報を使用して、動画を分割して保存
+        # --------------------------------------------------
         cut_save(video_id, cut_point, frames, video_info, dest_path)
 
-
-
-
-        
-    
-    
+if __name__ == '__main__':
+    cut_segmentation()
