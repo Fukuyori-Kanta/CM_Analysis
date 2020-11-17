@@ -31,14 +31,12 @@ logger.propagate = False
 def setting():
     """
     設定ファイル（settings.ini）から値を取得し、設定する関数
-    パス、閾値はそれぞれリストにまとめて返す
+    各パスをリストにまとめて返す
 
     Returns
     -------
     path : list
         設定したパスのリスト[root_path, video_path, cmData_path, result_path]
-    thresholds : list
-        設定した閾値のリスト[cut_threshold, cut_between_threshold]
     """
     # --------------------------------------------------
     # 設定ファイルの読み込み
@@ -61,16 +59,6 @@ def setting():
     cmData_path = os.path.join(root_path, config['PATH']['cmData_path']) # CMデータのパス
     result_path = os.path.join(root_path, config['PATH']['result_path']) # 結果を格納するパス
     
-    """
-    # 閾値の設定
-    cut_threshold = float(config['THRESHOLD']['cut_threshold'])                 # カット分割する閾値
-    cut_between_threshold = float(config['THRESHOLD']['cut_between_threshold']) # カット間フレームの削除に使用する閾値
-    hist_threshold = float(config['THRESHOLD']['hist_threshold'])               # ヒストグラムインタセクション（HI）の類似度に使用する閾値
-    flash_threshold = float(config['THRESHOLD']['flash_threshold'])             # フラッシュ検出時のHIの類似度に使用する閾値
-    effect_threshold = float(config['THRESHOLD']['effect_threshold'])           # エフェクト検出時のHIの類似度に使用する閾値
-    
-    thresholds = [cut_threshold, cut_between_threshold, hist_threshold, flash_threshold, effect_threshold]
-    """
     path = [root_path, video_path, cmData_path, result_path]
 
     return path
@@ -84,7 +72,7 @@ def read_csv(file_path, needs_skip_header=False):
     file_path : str
         読み込むCSVファイルのパス
 
-    needs_skip_header : bool
+    needs_skip_header : bool, default False
         ヘッダーを読み飛ばすかどうか
         
     Returns
@@ -124,6 +112,7 @@ if __name__ == '__main__':
         # ルートディレクトリではないとき作業ディレクトリを変更
         if os.getcwd() == root_path:
             os.chdir(root_path)
+            
         # --------------------------------------------------
         # CMデータの読み込み
         # --------------------------------------------------
