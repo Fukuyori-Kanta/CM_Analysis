@@ -35,29 +35,6 @@ def dest_folder_create(dest_path):
     if os.path.exists(dest_path):
         shutil.rmtree(dest_path)    # フォルダ削除
     os.mkdir(dest_path)     # 保存先フォルダの作成
-    
-def graph_save(data, dest_path):
-    """
-    変化割合のグラフを保存する関数
-
-    Parameters
-    ----------
-    data : numpy.ndarray
-        変化割合
-
-    dest_path : str
-        保存先フォルダのパス
-    """
-    fig = plt.figure(figsize=(10, 5))
-    plt.plot(data)                           
-    plt.title('Graph of Cut Change Detection')      # タイトル
-    plt.xlabel('frame')                             # X軸ラベル
-    plt.ylabel('Diff Rate')                         # Y軸ラベル
-    plt.grid(True)                                  # グリッドあり
-    plt.axhline(85, color='red')           # カットするラインを描画
-    #plt.show() # グラフ描画
-    
-    plt.savefig(dest_path + '\\change_rate_graph.jpg') # 保存
 
 def MSE(diff): 
     """
@@ -95,6 +72,7 @@ def target_delete(cut_point, delete_target):
     cut_point : list
         カット点のフレーム番号リスト（削除後）
     """
+    print(delete_target)
     # 削除対象のカット点を削除
     for i in delete_target:
         cut_point.remove(i)    # 削除
@@ -377,6 +355,7 @@ def effect_frame_delete(cut_point, frames):
                 if isdelete:
                     delete_target.append(cut_point[i])
 
+    delete_target = list(set(delete_target))    # 重複を削除
     cut_point = target_delete(cut_point, delete_target) # 削除対象の全フレームを削除
                 
     return cut_point
@@ -498,6 +477,29 @@ def cut_point_detect(frames):
     cut_point.append(len(frames) - 1) # 動画の最後のフレームインデックスを追加
 
     return cut_point
+  
+def graph_save(data, dest_path):
+    """
+    変化割合のグラフを保存する関数
+
+    Parameters
+    ----------
+    data : numpy.ndarray
+        変化割合
+
+    dest_path : str
+        保存先フォルダのパス
+    """
+    fig = plt.figure(figsize=(10, 5))
+    plt.plot(data)                           
+    plt.title('Graph of Cut Change Detection')      # タイトル
+    plt.xlabel('frame')                             # X軸ラベル
+    plt.ylabel('Diff Rate')                         # Y軸ラベル
+    plt.grid(True)                                  # グリッドあり
+    plt.axhline(85, color='red')           # カットするラインを描画
+    #plt.show() # グラフ描画
+    
+    plt.savefig(dest_path + '\\change_rate_graph.jpg') # 保存
 
 def cut_save(video_id, cut_point, frames, video_info, dest_path):
     """
@@ -579,7 +581,7 @@ def cut_segmentation(video_path, result_path):
     # --------------------------------------------------
     # カット分割
     # --------------------------------------------------
-    for video_id in video_id_list:
+    for video_id in video_id_list[:1]:
         input_video_path = video_path + '\\' + video_id + '.mp4' # 動画ファイルの入力パス 
         
         # --------------------------------------------------
@@ -587,15 +589,18 @@ def cut_segmentation(video_path, result_path):
         # --------------------------------------------------
         dest_path = os.path.join(result_path, video_id) # 各動画のカット分割結果の格納先
         dest_folder_create(dest_path)   # フォルダ作成 
+        
         # --------------------------------------------------
         # 動画の読み込み、フレームデータと動画情報を抽出
         # --------------------------------------------------
         frames, video_info = read_video_data(input_video_path)
+        
         # --------------------------------------------------
         # カット点の検出
         # --------------------------------------------------
         cut_point = cut_point_detect(frames)
         print(video_id, cut_point)
+        
         # --------------------------------------------------
         # カット点の情報を使用して、動画を分割して保存
         # --------------------------------------------------

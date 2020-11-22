@@ -2,116 +2,44 @@
 PD3で実装したメインのプログラム
 
 主な工程は以下の通り
-    1. カット分割
-    2. ラベル付け
-    3. シーン統合
-    4. 分析
-
+・カット分割
+・ラベル付け
+・シーン統合
+・分析
 """
-import numpy as np
-import matplotlib.pyplot as plt
-import cv2
 import os
-import shutil
-import csv
+import os.path
 from logging import getLogger, StreamHandler, DEBUG
 
-import os.path
-import configparser
+from setting import path_setting
+from file_io import read_csv
 from cut_segmentation_mod import cut_segmentation
-
-# ログ設定
-logger = getLogger(__name__)
-handler = StreamHandler()
-handler.setLevel(DEBUG)
-logger.setLevel(DEBUG)
-logger.addHandler(handler)
-logger.propagate = False
-
-def setting():
-    """
-    設定ファイル（settings.ini）から値を取得し、設定する関数
-    各パスをリストにまとめて返す
-
-    Returns
-    -------
-    path : list
-        設定したパスのリスト[root_path, video_path, cmData_path, result_path]
-    """
-    # --------------------------------------------------
-    # 設定ファイルの読み込み
-    # --------------------------------------------------
-    config = configparser.ConfigParser()    
-    ini_file = 'settings.ini'   # 設定ファイル
-
-    # ファイル存在チェック
-    if not os.path.exists(ini_file):
-        raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), ini_file)
-    
-    config.read(ini_file, encoding='utf-8')
-
-    # --------------------------------------------------
-    # 設定ファイルから値を取得
-    # --------------------------------------------------
-    # パスの設定
-    root_path = config['PATH']['root_path'] # ルートパス
-    video_path = os.path.join(root_path, config['PATH']['video_path'])   # 動画データのパス 
-    cmData_path = os.path.join(root_path, config['PATH']['cmData_path']) # CMデータのパス
-    result_path = os.path.join(root_path, config['PATH']['result_path']) # 結果を格納するパス
-    
-    path = [root_path, video_path, cmData_path, result_path]
-
-    return path
-
-def read_csv(file_path, needs_skip_header=False):
-    """
-    CSVファイルを読み込んで、その結果を返す関数
-
-    Parameters
-    ----------
-    file_path : str
-        読み込むCSVファイルのパス
-
-    needs_skip_header : bool, default False
-        ヘッダーを読み飛ばすかどうか
-        
-    Returns
-    -------
-    l : list
-        読み込んだ結果を返すリスト
-    """
-    csvfile = open(file_path, 'r', encoding='utf-8')
-    reader = csv.reader(csvfile)
-
-    # ヘッダーを読み飛ばしたい時
-    if needs_skip_header:
-        header = next(reader)  
-
-    l = []
-    for row in reader:
-        l.append(row)
-    
-    return l
 
 if __name__ == '__main__':
     # --------------------------------------------------
     # 処理開始
     # --------------------------------------------------
-    logger.debug('--------------------------------------------')
-    logger.debug('処理を開始します')
-    logger.debug('--------------------------------------------')
     try:   
         # --------------------------------------------------
         # 各種設定
         # --------------------------------------------------
-        os.chdir(r'C:\Users\hukuyori\Desktop\CM_Analysis')  # TODO 後で消す
+        os.chdir(r'C:\Users\hukuyori\CM_Analysis')  # TODO 後で消す
         
-        path = setting()
-        root_path, video_path, cmData_path, result_path = path  # パス
+        # path の設定
+        path = path_setting()   
+        root_path, video_path, cmData_path, result_path, ansData_path = path 
 
         # ルートディレクトリではないとき作業ディレクトリを変更
         if os.getcwd() == root_path:
             os.chdir(root_path)
+
+        # ログ設定
+        logger = getLogger(__name__)
+        handler = StreamHandler()
+        handler.setLevel(DEBUG)
+        logger.setLevel(DEBUG)
+        logger.addHandler(handler)
+        logger.propagate = False
             
         # --------------------------------------------------
         # CMデータの読み込み
@@ -130,7 +58,6 @@ if __name__ == '__main__':
         # --------------------------------------------------
         # カット分割
         # --------------------------------------------------
-        # 動画IDリストの全動画に対してカット分割
         logger.debug('カット分割を開始します。')
 
         cut_segmentation(video_path, result_path)   # カット分割
@@ -143,11 +70,11 @@ if __name__ == '__main__':
         # --------------------------------------------------
 
         # --------------------------------------------------
-        # 物体認識
+        # 物体認識によるラベル付け
         # --------------------------------------------------
 
         # --------------------------------------------------
-        # 動作認識
+        # 動作認識によるラベル付け
         # --------------------------------------------------
 
         # --------------------------------------------------
