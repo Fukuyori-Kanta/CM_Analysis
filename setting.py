@@ -10,7 +10,7 @@ def path_setting():
     Returns
     -------
     path : list
-        設定したパスのリスト[root_path, video_path, cmData_path, result_path, ansData_path]
+        設定したパスのリスト[root_path, video_path, cmData_path, result_path, ansData_path, result_eva_path]
     """
     # --------------------------------------------------
     # 設定ファイルの読み込み
@@ -33,7 +33,8 @@ def path_setting():
     cmData_path = os.path.join(root_path, config['PATH']['cmData_path']) # CMデータのパス
     result_path = os.path.join(root_path, config['PATH']['result_path']) # 結果を格納するパス
     ansData_path = os.path.join(root_path, config['PATH']['ansData_path']) # カット点の正解データのパス
+    result_eva_path = os.path.join(root_path, config['PATH']['result_eva_path']) # カット検出評価の結果出力パス
 
-    path = [root_path, video_path, cmData_path, result_path, ansData_path]
+    path = [root_path, video_path, cmData_path, result_path, ansData_path, result_eva_path]
 
     return path
