@@ -27,7 +27,7 @@ if __name__ == '__main__':
         
         # path の設定
         path = path_setting()   
-        root_path, video_path, cmData_path, result_path, ansData_path = path 
+        root_path, video_path, cmData_path, result_path, ansData_path, result_eva_path = path 
 
         # ルートディレクトリではないとき作業ディレクトリを変更
         if os.getcwd() == root_path:

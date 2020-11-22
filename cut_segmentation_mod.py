@@ -72,7 +72,6 @@ def target_delete(cut_point, delete_target):
     cut_point : list
         カット点のフレーム番号リスト（削除後）
     """
-    print(delete_target)
     # 削除対象のカット点を削除
     for i in delete_target:
         cut_point.remove(i)    # 削除
@@ -400,8 +399,7 @@ def read_video_data(input_video_path):
         ret, frame = cap.read()
         # 最後まで取得出来なかった場合、そこまでを総フレームとして更新
         if not ret:
-            #print(video_id)                                        # ★★★　必要ないなら消す
-            #n_frames = int(cap.get(cv2.CAP_PROP_POS_FRAMES))       # ★★★ 
+            #n_frames = int(cap.get(cv2.CAP_PROP_POS_FRAMES))
             break
 
         frames.append(frame)
@@ -413,7 +411,7 @@ def read_video_data(input_video_path):
 
     frames = [cv2.cvtColor(frame, cv2.COLOR_BGR2RGB) for frame in frames]   # 処理のため、BGRからRGBにする
     video_info = [fps, width, height]   # 戻り値用の動画情報をまとめる
-    
+
     return frames, video_info
 
 def cut_point_detect(frames):
@@ -508,7 +506,7 @@ def cut_save(video_id, cut_point, frames, video_info, dest_path):
     Parameters
     ----------
     video_id : str
-        フレームデータ（動画の全画像データ） 
+        動画ID 
 
     cut_point : list
         カット検出点（フレーム番号）のリスト
@@ -577,11 +575,11 @@ def cut_segmentation(video_path, result_path):
     # --------------------------------------------------
     files = os.listdir(video_path)  # 動画ファイル名（動画ID）一覧を取得
     video_id_list = [f.replace('.mp4', '') for f in files]  # 一覧から拡張子を削除
-
+    video_id_list = ["E191038279"]
     # --------------------------------------------------
     # カット分割
     # --------------------------------------------------
-    for video_id in video_id_list[:1]:
+    for video_id in video_id_list:
         input_video_path = video_path + '\\' + video_id + '.mp4' # 動画ファイルの入力パス 
         
         # --------------------------------------------------
@@ -605,6 +603,3 @@ def cut_segmentation(video_path, result_path):
         # カット点の情報を使用して、動画を分割して保存
         # --------------------------------------------------
         cut_save(video_id, cut_point, frames, video_info, dest_path)
-
-if __name__ == '__main__':
-    cut_segmentation()
