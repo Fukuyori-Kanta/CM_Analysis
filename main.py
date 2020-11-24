@@ -14,6 +14,7 @@ from logging import getLogger, StreamHandler, DEBUG
 from setting import path_setting
 from file_io import read_csv
 from cut_segmentation_mod import cut_segmentation
+from cut_img_generate_mod import cut_img_generate
 
 if __name__ == '__main__':
     # --------------------------------------------------
@@ -27,7 +28,7 @@ if __name__ == '__main__':
         
         # path の設定
         path = path_setting()   
-        root_path, video_path, cmData_path, result_path, ansData_path, result_eva_path = path 
+        root_path, video_path, cmData_path, result_cut_path, result_cut_img_path, ansData_path, result_eva_path = path 
 
         # ルートディレクトリではないとき作業ディレクトリを変更
         if os.getcwd() == root_path:
@@ -53,21 +54,27 @@ if __name__ == '__main__':
 
         logger.debug('CMデータを読み込みました。')
         logger.debug('入力元 : ' + cmData_path)
-        logger.debug('--------------------------------------------')
+        logger.debug('--------------------------------------------------')
 
         # --------------------------------------------------
         # カット分割
         # --------------------------------------------------
         logger.debug('カット分割を開始します。')
 
-        cut_segmentation(video_path, result_path)   # カット分割
+        #cut_segmentation(video_path, result_cut_path)   # カット分割
         
         logger.debug('全動画のカット分割が終了しました。')
-        logger.debug('-------------------------------------')
+        logger.debug('--------------------------------------------------')
 
         # --------------------------------------------------
         # カット画像の作成
         # --------------------------------------------------
+        logger.debug('カット画像生成を開始します。')
+
+        cut_img_generate(video_path, result_cut_img_path)
+
+        logger.debug('全カットのカット画像生成が終了しました。')
+        logger.debug('--------------------------------------------------')
 
         # --------------------------------------------------
         # 物体認識によるラベル付け

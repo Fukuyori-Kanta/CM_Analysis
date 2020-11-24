@@ -10,7 +10,7 @@ def path_setting():
     Returns
     -------
     path : list
-        設定したパスのリスト[root_path, video_path, cmData_path, result_path, ansData_path, result_eva_path]
+        設定したパスのリスト[root_path, video_path, cmData_path, result_cut_path, ansData_path, result_cut_eva_path]
     """
     # --------------------------------------------------
     # 設定ファイルの読み込み
@@ -31,10 +31,12 @@ def path_setting():
     root_path = config['PATH']['root_path'] # ルートパス
     video_path = os.path.join(root_path, config['PATH']['video_path'])   # 動画データのパス 
     cmData_path = os.path.join(root_path, config['PATH']['cmData_path']) # CMデータのパス
-    result_path = os.path.join(root_path, config['PATH']['result_path']) # 結果を格納するパス
-    ansData_path = os.path.join(root_path, config['PATH']['ansData_path']) # カット点の正解データのパス
-    result_eva_path = os.path.join(root_path, config['PATH']['result_eva_path']) # カット検出評価の結果出力パス
+    result_cut_path = os.path.join(root_path, config['PATH']['result_cut_path']) # カット分割結果の保存ディレクトリ
+    result_cut_img_path = os.path.join(root_path, config['PATH']['result_cut_img_path']) # カット画像作成結果の保存ディレクトリ
 
-    path = [root_path, video_path, cmData_path, result_path, ansData_path, result_eva_path]
+    ansData_path = os.path.join(root_path, config['PATH']['ansData_path']) # カット点の正解データのパス
+    result_cut_eva_path = os.path.join(root_path, config['PATH']['result_cut_eva_path']) # カット検出評価の結果出力パス
+
+    path = [root_path, video_path, cmData_path, result_cut_path, result_cut_img_path, ansData_path, result_cut_eva_path]
 
     return path

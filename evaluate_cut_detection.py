@@ -151,7 +151,7 @@ if __name__ == '__main__':
     # --------------------------------------------------
     # path の設定
     path = path_setting()   
-    root_path, video_path, cmData_path, result_path, ansData_path, result_eva_path = path 
+    root_path, video_path, cmData_path, result_path, ansData_path, result_cut_eva_path = path 
 
     # ログ設定
     logger = getLogger(__name__)
@@ -288,7 +288,7 @@ if __name__ == '__main__':
 
     # カット数一覧をCSVに書き出し
     result_cut_evaluates = [video_id_list, result_recall, result_precision, result_f1]
-    write_csv(result_cut_evaluates, result_eva_path)
+    write_csv(result_cut_evaluates, result_cut_eva_path)
 
     logger.debug('全動画の評価が終了しました。')
-    logger.debug('-------------------------------------')
+    logger.debug('--------------------------------------------------')

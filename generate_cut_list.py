@@ -530,17 +530,19 @@ def cut_save(video_id, cut_point, frames, video_info, dest_path):
     begin = 0   # カット最初のフレーム
 
     frames = [cv2.cvtColor(frame, cv2.COLOR_RGB2BGR) for frame in frames]   # RGBからBGRに戻す（戻さないと色が反転したまま保存される）
-
+    dest_path = r'C:\Users\hukuyori\CM_Analysis\Result\Cut_List'
     cut_count = len(cut_point) # カット数
     for i in range(cut_count):
-        writer.append(cv2.VideoWriter(dest_path + '\\cut' + str(i+1) + '.mp4', fourcc, fps, (int(width), int(height))))
+        #writer.append(cv2.VideoWriter(dest_path + '\\cut' + str(i+1) + '.mp4', fourcc, fps, (int(width), int(height))))
+        writer.append(cv2.VideoWriter(dest_path + '\\' + video_id + '_cut' + str(i+1) + '.mp4', fourcc, fps, (int(width), int(height))))
+        
         for j in range(begin, cut_point[i]+1):
             writer[i].write(frames[j])
         begin = cut_point[i]+1
 
-    logger.debug(video_id + '_cut1 ～ ' + str(cut_count) + 'を保存しました')
+    logger.debug(video_id + '_cut～' + str(cut_count) + 'を保存しました')
     logger.debug('保存先 : ' + dest_path)
-    logger.debug('--------------------------------------------------')
+    logger.debug('-------------------------------------')
 
     # --------------------------------------------------
     # 変化割合グラフを保存
@@ -549,7 +551,7 @@ def cut_save(video_id, cut_point, frames, video_info, dest_path):
     # diff_rates = [MSE(d) for d in diff_images]  # 差分画像のMSEを変化割合とする
     # graph_save(frames, dest_path)
 
-def cut_segmentation(video_path, result_cut_path):
+def cut_segmentation(video_path, result_path):
     """
     カット分割を行い、各カットをフォルダに保存する関数
     
@@ -567,7 +569,7 @@ def cut_segmentation(video_path, result_cut_path):
     video_path : str
         入力する動画データのフォルダパス
 
-    result_cut_path
+    result_path
         カット分割結果を保存するフォルダパス
     """
     # --------------------------------------------------
@@ -585,7 +587,7 @@ def cut_segmentation(video_path, result_cut_path):
         # --------------------------------------------------
         # 保存先フォルダの作成
         # --------------------------------------------------
-        dest_path = os.path.join(result_cut_path, video_id) # 各動画のカット分割結果の保存先
+        dest_path = os.path.join(result_path, video_id) # 各動画のカット分割結果の格納先
         dest_folder_create(dest_path)   # フォルダ作成 
         
         # --------------------------------------------------
