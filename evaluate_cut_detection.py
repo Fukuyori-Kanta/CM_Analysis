@@ -149,9 +149,11 @@ if __name__ == '__main__':
     # --------------------------------------------------
     # 各種設定
     # --------------------------------------------------
+    os.chdir(r'C:\Users\hukuyori\CM_Analysis')  # TODO 後で消す
+
     # path の設定
     path = path_setting()   
-    root_path, video_path, cmData_path, result_path, ansData_path, result_cut_eva_path = path 
+    root_path, video_path, cmData_path, result_cut_path, result_cut_img_path, ansData_path, result_cut_eva_path = path 
 
     # ログ設定
     logger = getLogger(__name__)
@@ -166,7 +168,11 @@ if __name__ == '__main__':
     # --------------------------------------------------
     cm_data = read_csv(cmData_path) # CMデータ（動画ID, 企業名, 商品名, 作品名, クラスタパターン）
     video_id_list = [cm_data[i][1] for i in range(len(cm_data))]    # 動画IDリストを作成
-
+    """
+    # 実写以外のCMは判定しない
+    delete_list = ['D191032200', 'A191025316', 'L191051119', 'A201054575']  # 削除のリスト
+    video_id_list = set(video_id_list) ^ set(delete_list)
+    """
     # --------------------------------------------------
     # 正解データの取得
     # --------------------------------------------------
