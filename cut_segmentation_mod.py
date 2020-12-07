@@ -72,6 +72,8 @@ def target_delete(cut_point, delete_target):
     cut_point : list
         カット点のフレーム番号リスト（削除後）
     """
+    delete_target = list(set(delete_target))    # 重複を排除
+
     # 削除対象のカット点を削除
     for i in delete_target:
         cut_point.remove(i)    # 削除
@@ -309,6 +311,7 @@ def flash_frame_delete(cut_point, frames):
             # 削除対象の時
             if isdelete:
                 delete_target.append(cut_point[i])
+                delete_target.append(cut_point[i+1])
 
     cut_point = target_delete(cut_point, delete_target) # 削除対象の全フレームを削除
     
@@ -353,6 +356,7 @@ def effect_frame_delete(cut_point, frames):
                 # 削除対象の時
                 if isdelete:
                     delete_target.append(cut_point[i])
+                    delete_target.append(cut_point[i+1])
 
     delete_target = list(set(delete_target))    # 重複を削除
     cut_point = target_delete(cut_point, delete_target) # 削除対象の全フレームを削除
