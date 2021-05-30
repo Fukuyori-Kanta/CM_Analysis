@@ -15,7 +15,7 @@ from setting import path_setting
 from file_io import read_csv
 from cut_segmentation_mod import cut_segmentation
 from cut_img_generate_mod import cut_img_generate
-#from generate_cut_list import cut_segmentation
+from label_shaping_mod import label_shaping
 
 if __name__ == '__main__':
     # --------------------------------------------------
@@ -73,7 +73,7 @@ if __name__ == '__main__':
         # --------------------------------------------------
         logger.debug('カット画像生成を開始します。')
 
-        #cut_img_generate(video_path, result_cut_img_path)
+        cut_img_generate(video_path, result_cut_img_path)
 
         logger.debug('全カットのカット画像生成が終了しました。')
         logger.debug('--------------------------------------------------')
@@ -85,6 +85,16 @@ if __name__ == '__main__':
         # --------------------------------------------------
         # 動作認識によるラベル付け
         # --------------------------------------------------
+        
+        # --------------------------------------------------
+        # ラベルデータの整形（翻訳，スクリーニング，結合）
+        # --------------------------------------------------      
+        logger.debug('ラベルデータの整形をします。')
+
+        label_shaping()
+
+        logger.debug('ラベルデータの整形が終了しました。')
+        logger.debug('--------------------------------------------------')
 
         # --------------------------------------------------
         # シーン統合
