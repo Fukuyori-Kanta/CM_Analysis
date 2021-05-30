@@ -13,9 +13,9 @@ from logging import getLogger, StreamHandler, DEBUG
 
 from setting import path_setting
 from file_io import read_csv
-# from cut_segmentation_mod import cut_segmentation
+from cut_segmentation_mod import cut_segmentation
 from cut_img_generate_mod import cut_img_generate
-from generate_cut_list import cut_segmentation
+#from generate_cut_list import cut_segmentation
 
 if __name__ == '__main__':
     # --------------------------------------------------
@@ -25,7 +25,7 @@ if __name__ == '__main__':
         # --------------------------------------------------
         # 各種設定
         # --------------------------------------------------
-        os.chdir(r'C:\Users\hukuyori\CM_Analysis')  # TODO 後で消す
+        os.chdir(os.path.dirname(os.path.abspath(__file__)))  # スクリプト実行ディレクトリ（[main.py] のディレクトリ）に変更
         
         # path の設定
         path = path_setting()   
@@ -46,6 +46,7 @@ if __name__ == '__main__':
         # --------------------------------------------------
         # CMデータの読み込み
         # --------------------------------------------------
+        """
         # ファイルの存在チェック
         if not os.path.exists(cmData_path):
             raise ValueError('CSVファイルを読み込めません。')
@@ -56,7 +57,7 @@ if __name__ == '__main__':
         logger.debug('CMデータを読み込みました。')
         logger.debug('入力元 : ' + cmData_path)
         logger.debug('--------------------------------------------------')
-
+        """
         # --------------------------------------------------
         # カット分割
         # --------------------------------------------------

@@ -3,11 +3,11 @@ import matplotlib.pyplot as plt
 import cv2
 import os
 import shutil
-import csv
 from logging import getLogger, StreamHandler, DEBUG
+from file_io import write_csv
 
 # 閾値の設定
-CUT_THRESHOLD = 85          # カット分割時の閾値
+CUT_THRESHOLD = 83          # カット分割時の閾値
 CUT_BETWEEN_THRESHOLD = 90  # カット間フレームの削除時の閾値
 HIST_THRESHOLD = 0.8        # ヒストグラムインタセクション（HI）の類似度比較時の閾値
 FLASH_THRESHOLD = 0.65      # フラッシュ検出時のHIの類似度比較時の閾値
@@ -386,7 +386,7 @@ def read_video_data(input_video_path):
     cap = cv2.VideoCapture(input_video_path)     
     # ビデオキャプチャーが開けていない場合、例外を返す
     if cap.isOpened() is False:
-        raise ValueError('読み込みエラー : 動画ID ' + video_id + 'が上手く読み取れません。')
+        raise ValueError('読み込みエラー : 動画ID ' + input_video_path + 'が上手く読み取れません。')
 
     fps = cap.get(cv2.CAP_PROP_FPS)                 # FPS
     width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)       # 幅
@@ -529,7 +529,8 @@ def cut_save(video_id, cut_point, frames, video_info, dest_path):
     # --------------------------------------------------
     fps, width, height = video_info # 動画情報の展開
 
-    fourcc = cv2.VideoWriter_fourcc('m','p','4','v')    # 動画の保存形式
+    #fourcc = cv2.VideoWriter_fourcc('m','p','4','v')    # 動画の保存形式
+    fourcc = 0x00000021    # 動画の保存形式(H264形式でエンコード)　2021/2/12 変更
     writer = [] # カット書き込み用のリスト
     begin = 0   # カット最初のフレーム
 
@@ -579,10 +580,11 @@ def cut_segmentation(video_path, result_cut_path):
     # --------------------------------------------------
     files = os.listdir(video_path)  # 動画ファイル名（動画ID）一覧を取得
     video_id_list = [f.replace('.mp4', '') for f in files]  # 一覧から拡張子を削除
-
+    print(video_id_list)
     # --------------------------------------------------
     # カット分割
     # --------------------------------------------------
+    cut_point_list = [] # カット点のリスト
     for video_id in video_id_list:
         input_video_path = video_path + '\\' + video_id + '.mp4' # 動画ファイルの入力パス 
         
@@ -601,9 +603,18 @@ def cut_segmentation(video_path, result_cut_path):
         # カット点の検出
         # --------------------------------------------------
         cut_point = cut_point_detect(frames)
-        print(video_id, cut_point)
+        cut_point_list.append(cut_point)
         
         # --------------------------------------------------
         # カット点の情報を使用して、動画を分割して保存
         # --------------------------------------------------
         cut_save(video_id, cut_point, frames, video_info, dest_path)
+    
+    # --------------------------------------------------
+    # カット点のリストをCSVファイルに保存（後の処理で再使用するため）
+    # --------------------------------------------------
+    base_path = os.path.dirname(os.path.abspath(__file__))  # スクリプト実行ディレクトリ
+    result_cut_point_path = os.path.normpath(os.path.join(base_path, 'Result\cut_point.csv'))   # カット点データの保存ファイル
+
+    write_csv([video_id_list, cut_point_list], result_cut_point_path)
+
