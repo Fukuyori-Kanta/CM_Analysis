@@ -1,4 +1,6 @@
 import csv
+import os
+import shutil
 
 def getEncode(filepath):
     encs = "iso-2022-jp euc-jp sjis utf-8-sig".split()
@@ -9,7 +11,6 @@ def getEncode(filepath):
             except UnicodeDecodeError:
                 continue
         return enc
-
 
 def read_csv(file_path, needs_skip_header=False):
     """
@@ -64,3 +65,18 @@ def write_csv(data, dest_path):
 
         else:   # 1次元配列の場合
             writer.writerow(data)
+
+def dest_folder_create(dest_path):
+    """
+    保存先フォルダを作成する関数
+
+    Parameters
+    ----------
+    dest_path : str
+        保存先フォルダのパス
+    """
+    # 保存先フォルダの作成
+    # 既に存在する場合は削除
+    if os.path.exists(dest_path):
+        shutil.rmtree(dest_path)    # フォルダ削除
+    os.mkdir(dest_path)     # 保存先フォルダの作成
