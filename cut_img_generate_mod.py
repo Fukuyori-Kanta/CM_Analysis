@@ -5,8 +5,8 @@ import os
 import shutil
 import csv
 from logging import getLogger, StreamHandler, DEBUG
-
-from cut_segmentation_mod import dest_folder_create, read_video_data, cut_point_detect
+from file_io import dest_folder_create
+from cut_segmentation_mod import read_video_data, cut_point_detect
 
 # ログ設定
 logger = getLogger(__name__)

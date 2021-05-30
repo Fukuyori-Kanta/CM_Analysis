@@ -2,9 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cv2
 import os
-import shutil
 from logging import getLogger, StreamHandler, DEBUG
-from file_io import write_csv
+from file_io import write_csv, dest_folder_create
 
 # 閾値の設定
 CUT_THRESHOLD = 83          # カット分割時の閾値
@@ -20,21 +19,6 @@ handler.setLevel(DEBUG)
 logger.setLevel(DEBUG)
 logger.addHandler(handler)
 logger.propagate = False
-
-def dest_folder_create(dest_path):
-    """
-    保存先フォルダを作成する関数
-
-    Parameters
-    ----------
-    dest_path : str
-        保存先フォルダのパス
-    """
-    # 保存先フォルダの作成
-    # 既に存在する場合は削除
-    if os.path.exists(dest_path):
-        shutil.rmtree(dest_path)    # フォルダ削除
-    os.mkdir(dest_path)     # 保存先フォルダの作成
 
 def MSE(diff): 
     """
