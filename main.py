@@ -16,6 +16,7 @@ from file_io import read_csv
 from cut_segmentation_mod import cut_segmentation
 from cut_img_generate_mod import cut_img_generate
 from label_shaping_mod import label_shaping
+from scene_integration_mod import scene_integration
 
 if __name__ == '__main__':
     # --------------------------------------------------
@@ -99,8 +100,15 @@ if __name__ == '__main__':
         # --------------------------------------------------
         # シーン統合
         # --------------------------------------------------
+        logger.debug('シーンの統合・保存をします。')
+
+        scene_integration()
+
+        logger.debug('シーンの統合・保存が終了しました。')
+        logger.debug('--------------------------------------------------')
 
         # --------------------------------------------------
+
         # 分析
         # --------------------------------------------------
 
