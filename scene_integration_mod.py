@@ -79,7 +79,7 @@ def label_comp(prev_id, next_id, prev_label, next_label):
         similarity = cs_array[0][1] # 類似行列から類似度を抽出
 
         # 類似度が閾値以上の時
-        if similarity >= 0.93 and prev_id == next_id:
+        if similarity >= 0.95 and prev_id == next_id:
             return True
         else:
             return False
@@ -203,7 +203,7 @@ def scene_integration():
             label = prev_label
         
         # ラベル名(個数)の形に加工
-        processed_label = label
+        processed_label = [c[0] + '(' + str(c[1]) + ')' for c in Counter(label).most_common()]
         
         # ラベルデータに追加
         scene_data.append([prev_id, cut_range[0], cut_range[1], processed_label])
