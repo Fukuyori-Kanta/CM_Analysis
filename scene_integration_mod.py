@@ -79,7 +79,7 @@ def label_comp(prev_id, next_id, prev_label, next_label):
         similarity = cs_array[0][1] # 類似行列から類似度を抽出
 
         # 類似度が閾値以上の時
-        if similarity >= 0.95 and prev_id == next_id:
+        if similarity >= 0.93 and prev_id == next_id:
             return True
         else:
             return False
