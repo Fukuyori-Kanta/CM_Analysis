@@ -127,7 +127,7 @@ def result_write_csv(data, dest_path, i):
     with open(dest_path, mode, newline="", encoding='utf-8-sig') as f:
         writer = csv.writer(f)
 
-        writer.writerow(data)
+        writer.writerows(data)
         """
         if len(data) >= 2: # 2次元配列以上の場合
             writer.writerows(data)
@@ -240,7 +240,7 @@ def favo_facter_data_shaping(scene_data, favo_data, video_id_list, i):
     for data in favo_data:
         video_id = data[3]      # 動画ID
         sec = int(data[4])      # 経過秒数
-        favo = float(data[6+i])   # 好感要因
+        favo = float(data[5+i])   # 好感要因
 
         if video_id in video_id_list:
             l.append([sec, favo])
@@ -327,12 +327,21 @@ def ranking(scene_favo_dic, scene_dic, i, result_path):
     for b in btm_cnt[:10]:
         print(b)
 
-    data = [top_cnt[:10], mid_cnt[:10], btm_cnt[:10]]
+    # CSVファイルに出力
+    data = [[['上位ラベル名', '個数']], top_cnt[:10], [['---------', '---------']], 
+            [['中位ラベル名', '個数']], mid_cnt[:10], [['---------', '---------']], 
+            [['下位ラベル名', '個数']], btm_cnt[:10]]
     for num in range(len(data)):
+        if i == 0:
+            file_name = 'facter_' + str(i) + '.csv'
+        elif i == 1:
+            file_name = 'facter_A.csv'
+        else:
+            file_name = 'facter_' + str(i-1) + '.csv'
         
-        result_write_csv(data[num], result_path + r'\facter_' + str(i) + '.csv', num)
+        output_path = os.path.normpath(os.path.join(result_path, file_name))
+        result_write_csv(data[num], output_path, num)
         
-
 def main():
     base = os.path.dirname(os.path.abspath(__file__))   # スクリプト実行ディレクトリ    
     scene_path = os.path.normpath(os.path.join(base, r'Result\Label\result_label.csv'))  # シーンデータのパス
@@ -350,6 +359,7 @@ def main():
     files = os.listdir(video_path)  # 動画ファイル名（動画ID）一覧を取得
     video_id_list = [f.replace('.mp4', '') for f in files]  # 一覧から拡張子を削除
     
+    """
     # データの整形
     scene_dic, favo_dic = data_shaping(scene_data, favo_data, video_id_list)
 
@@ -374,15 +384,22 @@ def main():
 
     # 出力
     scene_favo_list = [[sfd[0], sfd[1], scene_favo_dic[sfd]] for sfd in scene_favo_dic.keys()]
-    
+
     write_csv(scene_favo_list, r'C:\Users\fukuyori\CM_Analysis\Result\Favo\favo.csv')
     
-    
+    """
     #################################
     # 好感度要因15項目
     #################################
-    for i in range(1, 16):
-        print('------- R' + str(i) + '-------')
+    for i in range(17):
+        if i == 0:
+            print('------- 好感度 -------')
+        elif i == 1:
+            print('------- A -------')
+        else:
+            print('------- R' + str(i-1) + '-------')
+
+        # データの整形
         scene_dic, favo_dic = favo_facter_data_shaping(scene_data, favo_data, video_id_list, i)
 
         # 各シーンに好感度を付与
@@ -400,9 +417,8 @@ def main():
                 
                 # シーン範囲から最適な好感度を取得
                 scene_favo_dic[(video_id, scene_no)] = get_best_favo(start, end, favo_list)
-        # 上位、中位、下位でシーンに付与されたラベル上位10件を出力
+        # データの整形下位でシーンに付与されたラベル上位10件を出力
         ranking(scene_favo_dic, scene_dic, i, result_path)
-    
     
 if __name__=="__main__":
     main()
