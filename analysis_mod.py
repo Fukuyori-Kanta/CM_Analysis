@@ -5,6 +5,7 @@ import heapq
 import numpy as np
 import re
 
+
 from file_io import read_csv, read_favo, write_ranking_data
 
 def order_desc(dic, N):
