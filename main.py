@@ -17,6 +17,7 @@ from cut_segmentation_mod import cut_segmentation
 from cut_img_generate_mod import cut_img_generate
 from label_shaping_mod import label_shaping
 from scene_integration_mod import scene_integration
+from analysis_mod import favo_analysis
 
 if __name__ == '__main__':
     # --------------------------------------------------
@@ -92,7 +93,7 @@ if __name__ == '__main__':
         # --------------------------------------------------      
         logger.debug('ラベルデータの整形を開始します。')
 
-        label_shaping()
+        #label_shaping()
 
         logger.debug('ラベルデータの整形が終了しました。')
         logger.debug('--------------------------------------------------')
@@ -102,15 +103,20 @@ if __name__ == '__main__':
         # --------------------------------------------------
         logger.debug('シーンの統合・保存を開始します。')
 
-        scene_integration()
+        #scene_integration()
 
         logger.debug('シーンの統合・保存が終了しました。')
         logger.debug('--------------------------------------------------')
 
         # --------------------------------------------------
-
-        # 分析
+        # 好感度とのマッチング・分析
         # --------------------------------------------------
+        logger.debug('好感度とのマッチング・分析を開始します。')
+
+        favo_analysis()
+
+        logger.debug('好感度とのマッチング・分析が終了しました。')
+        logger.debug('--------------------------------------------------')
 
     # 例外処理
     except ValueError as e:
