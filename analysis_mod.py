@@ -1,6 +1,3 @@
-import csv
-import random
-import cv2
 import os
 import ast
 from collections import Counter
