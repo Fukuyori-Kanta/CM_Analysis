@@ -1,12 +1,10 @@
-import csv
-import random
-import cv2
 import os
 import ast
 from collections import Counter
 import heapq
 import numpy as np
 import re
+
 
 from file_io import read_csv, read_favo, write_ranking_data
 
@@ -85,6 +83,7 @@ def ranking(scene_favo_dic, scene_dic, i, result_path):
     # 上位、中位、下位で〇〇シーンに付与されたラベル上位10件を出力
     dic_len = len(scene_favo_dic)   # 総シーン数
     all_favo = order_desc(scene_favo_dic, dic_len)   # 好感度の降順
+    scene_range = 1000  # 1000件のシーン範囲
 
     all_scene = []  # 全シーンのデータ [動画名, シーン番号, 好感度, ラベルのリスト]
     for scene in all_favo.keys():
@@ -107,7 +106,7 @@ def ranking(scene_favo_dic, scene_dic, i, result_path):
     label_cnt_dic = {a[0]:int(a[1]) for a in all_cnt}
     
     # 上位
-    top_scene = all_scene[:1000]
+    top_scene = all_scene[:scene_range]
     top_label = []
     for scene in top_scene:
         label = [re.sub("\(.*\)", "", s) for s in scene[3]] # 個数削除
@@ -121,7 +120,7 @@ def ranking(scene_favo_dic, scene_dic, i, result_path):
     print('-----------')
     
     # 中位
-    mid_scene = all_scene[dic_len//2-500:dic_len//2+500]
+    mid_scene = all_scene[(dic_len//2)-(scene_range//2):(dic_len//2)+(scene_range//2)]
     mid_label = []
     for scene in mid_scene:
         label = [re.sub("\(.*\)", "", s) for s in scene[3]] # 個数削除
@@ -135,7 +134,7 @@ def ranking(scene_favo_dic, scene_dic, i, result_path):
     print('-----------')
 
     # 下位
-    btm_scene = all_scene[-1000:]
+    btm_scene = all_scene[-scene_range:]
     btm_label = []
     for scene in btm_scene:
         label = [re.sub("\(.*\)", "", s) for s in scene[3]] # 個数削除
@@ -162,7 +161,7 @@ def ranking(scene_favo_dic, scene_dic, i, result_path):
         output_path = os.path.normpath(os.path.join(result_path, file_name))
         write_ranking_data(data[num], output_path, num)
 
-def main():
+def favo_analysis():
     base = os.path.dirname(os.path.abspath(__file__))   # スクリプト実行ディレクトリ    
     scene_path = os.path.normpath(os.path.join(base, r'Result\Label\result_label.csv'))  # シーンデータのパス
     favo_path = os.path.normpath(os.path.join(base, r'Data\好感度データ\favorability_data.csv'))  # 好感度データのパス
@@ -201,15 +200,12 @@ def main():
             scene_list = scene_dic[video_id]
 
             for sl in scene_list:
-                scene_no = sl[0]
-                start = sl[1]
-                end = sl[2]
+                scene_no = sl[0]    # シーン番号
+                start = sl[1]       # スタートフレーム
+                end = sl[2]         # エンドフレーム
                 
                 # シーン範囲から最適な好感度を取得
                 scene_favo_dic[(video_id, scene_no)] = get_best_favo(start, end, favo_list)
 
         # データの整形下位でシーンに付与されたラベル上位10件を出力
         ranking(scene_favo_dic, scene_dic, i, result_path)
-    
-if __name__=="__main__":
-    main()
