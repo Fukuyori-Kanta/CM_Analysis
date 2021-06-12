@@ -5,8 +5,7 @@ import heapq
 import numpy as np
 import re
 
-
-from file_io import read_csv, read_favo, write_ranking_data
+from file_io import read_csv, read_favo, write_ranking_data, write_csv
 
 def order_desc(dic, N):
     # valueでソートしたときの上位N個
@@ -77,7 +76,7 @@ def get_best_favo(start, end, favo_list):
     candidate_favo = [favo_list[ns//30-1][1] for ns in near_sec_list]
     
     # 好感度の平均値を返す
-    return sum(candidate_favo) / len(candidate_favo)
+    return round(sum(candidate_favo) / len(candidate_favo), 5)
 
 def ranking(scene_favo_dic, scene_dic, i, result_path):
     # 上位、中位、下位で〇〇シーンに付与されたラベル上位10件を出力
@@ -166,7 +165,8 @@ def favo_analysis():
     scene_path = os.path.normpath(os.path.join(base, r'Result\Label\result_label.csv'))  # シーンデータのパス
     favo_path = os.path.normpath(os.path.join(base, r'Data\好感度データ\favorability_data.csv'))  # 好感度データのパス
     video_path = os.path.normpath(os.path.join(base, r'Data\Movie'))  # 動画データのパス
-    result_path = os.path.normpath(os.path.join(base, r'Result\Favo'))  # 動画データのパス
+    result_path = os.path.normpath(os.path.join(base, r'Result\Favo'))  # 各好感要因の結果格納パス
+    result_ALL_path = os.path.normpath(os.path.join(base, r'Result\Favo\result_data_ALL.csv'))  # 全シーン，全好感要因の結果格納パス
 
     # 場面データの読み込み
     scene_data = read_csv(scene_path, True)
@@ -178,6 +178,8 @@ def favo_analysis():
     files = os.listdir(video_path)  # 動画ファイル名（動画ID）一覧を取得
     video_id_list = [f.replace('.mp4', '') for f in files]  # 一覧から拡張子を削除
     
+    result_ALL = [] # 全データ格納リスト
+
     #################################
     # 好感度, 試用意向, 15項目の好感要因でランキング作成
     #################################
@@ -194,7 +196,8 @@ def favo_analysis():
 
         # 各シーンに好感度を付与
         # {(video_id, scene_no) : favo, ((video_id, scene_no) : favo, ...}
-        scene_favo_dic = {} # 各シーンの好感度 
+        scene_favo_dic = {}  # 各シーンの好感度 （辞書）
+        scene_favo_list = [] # 各シーンの好感度（リスト）
         for video_id in video_id_list:
             favo_list = favo_dic[video_id]
             scene_list = scene_dic[video_id]
@@ -205,7 +208,28 @@ def favo_analysis():
                 end = sl[2]         # エンドフレーム
                 
                 # シーン範囲から最適な好感度を取得
-                scene_favo_dic[(video_id, scene_no)] = get_best_favo(start, end, favo_list)
+                best_favo = get_best_favo(start, end, favo_list)
 
+                scene_favo_dic[(video_id, scene_no)] = best_favo
+                scene_favo_list.append([video_id, scene_no, best_favo])
+                
         # データの整形下位でシーンに付与されたラベル上位10件を出力
         ranking(scene_favo_dic, scene_dic, i, result_path)
+        
+        # 全データの格納、出力
+        # 最初はresult_ALLにコピーし、それ以降は追加していく
+        if i == 0:
+            result_ALL = scene_favo_list
+        else:
+            for result_row, scene_favo in zip(result_ALL, scene_favo_list):
+                result_row.append(scene_favo[2])
+        
+    # カラム名を追加
+    result_ALL.insert(0, ['動画名', 'シーン番号', '好感度', '試用意向', '出演者', 'ユーモラス', 'セクシー ', 
+                          '宣伝文句', '音楽・サウンド', ' 商品にひかれた', '説得力に共感', 'ダサいけど憎めない', '時代の先端 ', 
+                          '心がなごむ', 'ストーリー展開', '企業姿勢', '映像・画像', '周囲の評判 ', 'かわいらしい'])
+    
+    # CSVファイルに保存
+    write_csv(result_ALL, result_ALL_path)
+
+favo_analysis()
