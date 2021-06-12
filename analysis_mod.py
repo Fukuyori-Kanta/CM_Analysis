@@ -164,7 +164,8 @@ def favo_analysis():
     base = os.path.dirname(os.path.abspath(__file__))   # スクリプト実行ディレクトリ    
     scene_path = os.path.normpath(os.path.join(base, r'Result\Label\result_label.csv'))  # シーンデータのパス
     favo_path = os.path.normpath(os.path.join(base, r'Data\好感度データ\favorability_data.csv'))  # 好感度データのパス
-    video_path = os.path.normpath(os.path.join(base, r'Data\Movie'))  # 動画データのパス
+    label_path = os.path.normpath(os.path.join(base, r'Result\Label\result_label.csv'))  # ラベルデータのパス
+    video_path = os.path.normpath(os.path.join(base, r'Data\Movie'))    # 動画データのパス
     result_path = os.path.normpath(os.path.join(base, r'Result\Favo'))  # 各好感要因の結果格納パス
     result_ALL_path = os.path.normpath(os.path.join(base, r'Result\Favo\result_data_ALL.csv'))  # 全シーン，全好感要因の結果格納パス
 
@@ -173,6 +174,9 @@ def favo_analysis():
 
     # 好感度データの読み込み
     favo_data = read_favo(favo_path, True)
+
+    # ラベルデータの読み込み
+    label_data = read_csv(label_path, True)
 
     # 動画IDリストの作成
     files = os.listdir(video_path)  # 動画ファイル名（動画ID）一覧を取得
@@ -217,16 +221,18 @@ def favo_analysis():
         ranking(scene_favo_dic, scene_dic, i, result_path)
         
         # 全データの格納、出力
-        # 最初はresult_ALLにコピーし、それ以降は追加していく
+        # 最初の処理で、result_ALLにラベルデータをコピーする
+        # それ以降は各好感要因の数値を追加していく
         if i == 0:
-            result_ALL = scene_favo_list
-        else:
-            for result_row, scene_favo in zip(result_ALL, scene_favo_list):
-                result_row.append(scene_favo[2])
+            result_ALL = label_data
+
+        for result_row, scene_favo in zip(result_ALL, scene_favo_list):
+            result_row.append(scene_favo[2])
         
     # カラム名を追加
-    result_ALL.insert(0, ['動画名', 'シーン番号', '好感度', '試用意向', '出演者', 'ユーモラス', 'セクシー ', 
-                          '宣伝文句', '音楽・サウンド', ' 商品にひかれた', '説得力に共感', 'ダサいけど憎めない', '時代の先端 ', 
+    result_ALL.insert(0, ['動画名', 'シーン番号', 'スタートフレーム', 'エンドフレーム', 'ラベルのリスト', 
+                          '好感度', '試用意向', '出演者', 'ユーモラス', 'セクシー ', '宣伝文句', 
+                          '音楽・サウンド', ' 商品にひかれた', '説得力に共感', 'ダサいけど憎めない', '時代の先端 ', 
                           '心がなごむ', 'ストーリー展開', '企業姿勢', '映像・画像', '周囲の評判 ', 'かわいらしい'])
     
     # CSVファイルに保存
