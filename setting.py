@@ -6,7 +6,6 @@ def path_setting():
     """
     設定ファイル（settings.ini）から値を取得し、設定する関数
     各パスをリストにまとめて返す
-
     Returns
     -------
     path : list
