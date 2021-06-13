@@ -177,9 +177,14 @@ def scene_integration():
     # ['動画ID', 'シーン番号', 'スタートフレーム', 'エンドフレーム', '[ラベルのリスト]']
     scene_data = [] 
     for i in range(len(cut_data)):
-        # インデックスが最後の場合、類似度は算出しない
+        # インデックスが最後の場合、類似度は算出せずにシーンデータに追加
         if i == len(cut_data)-1:
-            scene_data.append([cut_data[i][0], cut_data[i][2], cut_data[i][3], ast.literal_eval(cut_data[i][4])])
+            # 冗長なラベルの削除
+            label = [l for l in ast.literal_eval(cut_data[i][4]) if l != '服' and l != '顔' and l != '人']  
+
+            # ラベル名(個数)の形に加工
+            processed_label = [c[0] + '(' + str(c[1]) + ')' for c in Counter(label).most_common()]
+            scene_data.append([cut_data[i][0], cut_data[i][2], cut_data[i][3], processed_label])
             break
 
         prev_id = cut_data[i][0]      # 動画ID
