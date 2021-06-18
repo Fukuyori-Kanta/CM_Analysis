@@ -1,11 +1,34 @@
-import os
+﻿import os
 import ast
 from collections import Counter
 import heapq
 import numpy as np
 import re
+import csv
 
 from file_io import read_csv, read_favo, write_ranking_data, write_csv
+
+def write_rank_ALL(data, dest_path, i):
+    """
+    データを受け取り、CSVに書き出す関数
+
+    Parameters
+    ----------
+    data : list
+        出力するデータ
+        
+    dest_path : str
+        保存先フォルダのパス
+    """
+    if i == 0:
+        mode = 'w'
+    else:
+        mode = 'a'
+
+    with open(dest_path, mode, newline="", encoding='utf-8-sig') as f:
+        writer = csv.writer(f)
+
+        writer.writerows(data)
 
 def order_desc(dic, N):
     # valueでソートしたときの上位N個
@@ -146,9 +169,14 @@ def ranking(scene_favo_dic, scene_dic, i, result_path):
         print(b)
     
     # CSVファイルに出力
+    """
     data = [[['上位ラベル名', '個数', '正規化した数値']], top_cnt[:10], [['---------', '---------', '---------']], 
             [['中位ラベル名', '個数', '正規化した数値']], mid_cnt[:10], [['---------', '---------', '---------']], 
             [['下位ラベル名', '個数', '正規化した数値']], btm_cnt[:10]]
+    """
+    
+    data = [top_cnt[:10], mid_cnt[:10], btm_cnt[:10]]
+    
     for num in range(len(data)):
         if i == 0:
             file_name = 'facter_' + str(i) + '.csv'
@@ -158,10 +186,9 @@ def ranking(scene_favo_dic, scene_dic, i, result_path):
             file_name = 'facter_' + str(i-1) + '.csv'
         
         output_path = os.path.normpath(os.path.join(result_path, file_name))
-        write_ranking_data(data[num], output_path, num)
+        #write_ranking_data(data[num], output_path, num)
 
 def favo_analysis():
-    # パス設定
     base = os.path.dirname(os.path.abspath(__file__))   # スクリプト実行ディレクトリ    
     scene_path = os.path.normpath(os.path.join(base, r'Result\Label\result_label.csv'))  # シーンデータのパス
     favo_path = os.path.normpath(os.path.join(base, r'Data\好感度データ\favorability_data.csv'))  # 好感度データのパス
@@ -169,7 +196,6 @@ def favo_analysis():
     video_path = os.path.normpath(os.path.join(base, r'Data\Movie'))    # 動画データのパス
     result_path = os.path.normpath(os.path.join(base, r'Result\Favo'))  # 各好感要因の結果格納パス
     result_ALL_path = os.path.normpath(os.path.join(base, r'Result\Favo\result_data_ALL.csv'))  # 全シーン，全好感要因の結果格納パス
-    rank__ALL_path = os.path.normpath(os.path.join(base, r'Result\Favo\rank_data_ALL.csv'))     # 全好感要因のランキング結果格納パス
 
     # 場面データの読み込み
     scene_data = read_csv(scene_path, True)
@@ -238,9 +264,11 @@ def favo_analysis():
                           '心がなごむ', 'ストーリー展開', '企業姿勢', '映像・画像', '周囲の評判 ', 'かわいらしい'])
     
     # CSVファイルに保存
-    write_csv(result_ALL, result_ALL_path)
+    #write_csv(result_ALL, result_ALL_path)
+
 
     # 全好感要因のランキング結果を1つの表にまとめる
+    favo_path = r'C:\Users\fukuyori\CM_Analysis\Result\Favo'
     rank_data_ALL = []
     for i in range(17):
         if i == 0:
@@ -251,7 +279,7 @@ def favo_analysis():
         else:
             file_name = 'facter_' + str(i-1) + '.csv'
 
-        input_path = os.path.normpath(os.path.join(result_path, file_name))
+        input_path = os.path.normpath(os.path.join(favo_path, file_name))
         rank_data = read_csv(input_path)
         if i == 0:
             rank_data_ALL = rank_data
@@ -262,6 +290,7 @@ def favo_analysis():
                 result_row.append(data[1])
                 result_row.append(data[2])
 
-    write_csv(rank_data_ALL, rank__ALL_path)
+    write_csv(rank_data_ALL, r'C:\Users\fukuyori\asd.csv')
+
 
 favo_analysis()
