@@ -1,7 +1,6 @@
 import json
 import os 
 import ast
-import re
 
 from file_io import read_csv, write_csv
 
@@ -28,11 +27,7 @@ def noun_label_shaping():
     noun_en_path = os.path.normpath(os.path.join(base_path, r'Data\Label\noun_label(en).txt'))     # データセットのラベル群（英語）
     noun_ja_path = os.path.normpath(os.path.join(base_path, r'Data\Label\noun_label(ja).txt'))     # データセットのラベル群（日本語）
     trans_table_path = os.path.normpath(os.path.join(base_path, r'Data\Label\noun_screening.csv')) # スクリーニング用の対応表
-    
-    # 動画リストの作成
-    files = os.listdir(video_path)  # 動画ファイル名（動画ID）一覧を取得
-    video_id_list = [f.replace('.mp4', '') for f in files]  # 一覧から拡張子を削除
-    
+        
     # ラベル一覧を読み込み（英語、日本語）
     noun_label_en = read_txt(noun_en_path)
     noun_label_ja = read_txt(noun_ja_path)
@@ -44,27 +39,27 @@ def noun_label_shaping():
     trans_table = {data[0]:data[1] for data in read_csv(trans_table_path)}
 
     # 名詞ラベル結果を取得
-    noun_result = [ast.literal_eval(l) for l in read_csv(noun_result_path)[0]]
+    noun_result = [ast.literal_eval(l) for result in read_csv(noun_result_path) for l in result]
+    
+    noun_label = []  # 整形後の名詞ラベル結果
+    for result in noun_result:
+        labels = result[2]   # ラベルデータ
+        
+        # 動画リストとラベル結果の動画IDが同じの時、
+        # ラベル名を翻訳・スクリーニングして結果に格納する
+        for label in labels:
+            # 英語から日本語へ翻訳
+            label_name_en = label[0]
+            label_name_ja = label_trans_dic[label_name_en]
 
-    noun_label = []
-    for video_id in video_id_list:
-        for result in noun_result:
-            # 動画リストとラベル結果の動画IDが同じなら
-            if video_id == result[0][0]:
-                for i in range(len(result)):
-                    for j in range(len(result[i][2])):
-                        
-                        # スコア部分を削除
-                        l_en = re.sub('\([0-9]*\.[0-9]*%\)', '', result[i][2][j]) 
-
-                        # 英語から日本語へ翻訳
-                        result[i][2][j] = label_trans_dic[l_en]  
-
-                        # スクリーニング
-                        if result[i][2][j] in trans_table: # 変換辞書に存在すれば
-                            result[i][2][j] = trans_table[result[i][2][j]]
-                        
-                    noun_label.append(result[i])
+            # スクリーニング
+            if label_name_ja in trans_table: # 変換辞書に存在すれば
+                label_name_ja = trans_table[label_name_ja]
+            
+            # 結果を書き換える
+            label[0] = label_name_ja
+            
+        noun_label.append(result)
 
     return noun_label
 
@@ -158,8 +153,8 @@ def label_shaping():
 
     """
     base_path = os.path.dirname(os.path.abspath(__file__))  # スクリプト実行ディレクトリ
-    cut_point_path = os.path.normpath(os.path.join(base_path, r'Result\cut_point.csv'))   # 動作認識のラベル結果（名詞ラベル）
-    merged_label_path = os.path.normpath(os.path.join(base_path, r'Result\Label\merged_label.csv'))   # 動作認識のラベル結果（名詞ラベル）
+    cut_point_path = os.path.normpath(os.path.join(base_path, r'Result\cut_point.csv'))   # カット点データ
+    merged_label_path = os.path.normpath(os.path.join(base_path, r'Result\Label\merged_label.csv'))   # 結合ラベルデータ格納パス
     
     # 名詞ラベルの整理
     noun_label = noun_label_shaping()
@@ -176,3 +171,5 @@ def label_shaping():
 
     # CSVファイルに書き出し
     write_csv(label, merged_label_path)
+    
+label_shaping()
