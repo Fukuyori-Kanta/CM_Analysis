@@ -32,7 +32,7 @@ def shaping_favo_data(scene_data, favo_data, video_id_list, i):
         scene_no = data[1]      # シーン番号
         start = int(data[2])    # スタートフレーム
         end = int(data[3])      # エンドフレーム
-        label = ast.literal_eval(data[4])   # ラベルのリスト
+        label = data[4]   # ラベルのリスト
 
         # 前デーのIDと動画IDが違うとき
         if prev_id != video_id:
@@ -146,9 +146,7 @@ def ranking(scene_favo_dic, scene_dic, i, result_path):
         print(b)
     
     # CSVファイルに出力
-    data = [[['上位ラベル名', '個数', '正規化した数値']], top_cnt[:10], [['---------', '---------', '---------']], 
-            [['中位ラベル名', '個数', '正規化した数値']], mid_cnt[:10], [['---------', '---------', '---------']], 
-            [['下位ラベル名', '個数', '正規化した数値']], btm_cnt[:10]]
+    data = [top_cnt[:10], mid_cnt[:10], btm_cnt[:10]]
     for num in range(len(data)):
         if i == 0:
             file_name = 'facter_' + str(i) + '.csv'
@@ -169,7 +167,7 @@ def favo_analysis():
     video_path = os.path.normpath(os.path.join(base, r'Data\Movie'))    # 動画データのパス
     result_path = os.path.normpath(os.path.join(base, r'Result\Favo'))  # 各好感要因の結果格納パス
     result_ALL_path = os.path.normpath(os.path.join(base, r'Result\Favo\result_data_ALL.csv'))  # 全シーン，全好感要因の結果格納パス
-    rank__ALL_path = os.path.normpath(os.path.join(base, r'Result\Favo\rank_data_ALL.csv'))     # 全好感要因のランキング結果格納パス
+    rank_ALL_path = os.path.normpath(os.path.join(base, r'Result\Favo\rank_data_ALL.csv'))     # 全好感要因のランキング結果格納パス
 
     # 場面データの読み込み
     scene_data = read_csv(scene_path, True)
@@ -220,7 +218,7 @@ def favo_analysis():
                 scene_favo_list.append([video_id, scene_no, best_favo])
                 
         # データの整形下位でシーンに付与されたラベル上位10件を出力
-        ranking(scene_favo_dic, scene_dic, i, result_path)
+        #ranking(scene_favo_dic, scene_dic, i, result_path)
         
         # 全データの格納、出力
         # 最初の処理で、result_ALLにラベルデータをコピーする
@@ -262,6 +260,6 @@ def favo_analysis():
                 result_row.append(data[1])
                 result_row.append(data[2])
 
-    write_csv(rank_data_ALL, rank__ALL_path)
+    write_csv(rank_data_ALL, rank_ALL_path)
 
 favo_analysis()
