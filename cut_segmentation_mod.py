@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import cv2
 import os
 from logging import getLogger, StreamHandler, DEBUG
-from file_io import write_csv, dest_folder_create
+from file_io import write_csv, create_dest_folder
 
 # 閾値の設定
 CUT_THRESHOLD = 83          # カット分割時の閾値
@@ -11,6 +11,7 @@ CUT_BETWEEN_THRESHOLD = 90  # カット間フレームの削除時の閾値
 HIST_THRESHOLD = 0.8        # ヒストグラムインタセクション（HI）の類似度比較時の閾値
 FLASH_THRESHOLD = 0.65      # フラッシュ検出時のHIの類似度比較時の閾値
 EFFECT_THRESHOLD = 0.8      # エフェクト検出時のHIの類似度比較時の閾値
+EXTENSION = '.mp4'          # 保存するカットの拡張子（MP4）
 
 # ログ設定
 logger = getLogger(__name__)
@@ -218,7 +219,7 @@ def incorrect_cut_point_delete_by_color_histogram(cut_point, frames):
 
         カット点同士の類似度が高い → 誤ったカット点の可能性が高い（カット点に同じような画像は基本的にないため）
 
-        ヒストグラムインタセクション    D = Σ min(h[i] - h[i+1])　　h はヒストグラム
+        ヒストグラムインタセクション    D = Σ min(h[i] - h[i+1])    ※h はヒストグラム
         
     具体的な処理のコードはサブ関数である[color_histogram_comp]に記載
 
@@ -254,7 +255,7 @@ def flash_frame_delete(cut_point, frames):
     フラッシュを検出して、該当カット点を削除する関数
     [方法]
         次のカット点とのフレーム差が5フレーム以内のカット点のみ検査する
-        次のカット点を含めて幅3フレーム分の画像を取得する　
+        次のカット点を含めて幅3フレーム分の画像を取得する
         取得した複数の画像の各画素の最小値を取った画像を作成する
         該当カット点の画像と作成した最小画素の画像で輝度ヒストグラムの類似度を算出
         類似度が閾値以上の時、フラッシュの可能性があるのでカット点から削除
@@ -441,7 +442,7 @@ def cut_point_detect(frames):
     # --------------------------------------------------
     cut_point = []    # カット点のフレーム番号リスト
     for i in range(len(diff_images)):
-        # 変化割合が閾値を以上の時
+        # 変化割合が閾値以上の時
         if diff_rates[i] >= CUT_THRESHOLD:    
             cut_point.append(i)   # リストに追加
 
@@ -476,18 +477,15 @@ def graph_save(data, dest_path):
     dest_path : str
         保存先フォルダのパス
     """
-    fig = plt.figure(figsize=(10, 5))
     plt.plot(data)                           
-    plt.title('Graph of Cut Change Detection')      # タイトル
-    plt.xlabel('frame')                             # X軸ラベル
-    plt.ylabel('Diff Rate')                         # Y軸ラベル
-    plt.grid(True)                                  # グリッドあり
-    plt.axhline(85, color='red')           # カットするラインを描画
-    #plt.show() # グラフ描画
-    
-    plt.savefig(dest_path + '\\change_rate_graph.jpg') # 保存
+    plt.title('Graph of Cut Change Detection')  # タイトル
+    plt.xlabel('frame')                         # X軸ラベル
+    plt.ylabel('Diff Rate')                     # Y軸ラベル
+    plt.grid(True)                              # グリッドあり
+    plt.axhline(85, color='red')                # カットするラインを描画
+    plt.savefig(dest_path)                      # 保存
 
-def cut_save(video_id, cut_point, frames, video_info, dest_path):
+def save_cut(video_id, cut_point, frames, video_info, dest_path):
     """
     動画を分割して保存する関数
 
@@ -522,7 +520,8 @@ def cut_save(video_id, cut_point, frames, video_info, dest_path):
 
     cut_count = len(cut_point) # カット数
     for i in range(cut_count):
-        writer.append(cv2.VideoWriter(dest_path + '\\cut' + str(i+1) + '.mp4', fourcc, fps, (int(width), int(height))))
+        save_cut_path = os.path.normpath(os.path.join(dest_path, 'cut' + str(i+1) + '.mp4'))    # 保存先
+        writer.append(cv2.VideoWriter(save_cut_path, fourcc, fps, (int(width), int(height))))
         for j in range(begin, cut_point[i]+1):
             writer[i].write(frames[j])
         begin = cut_point[i]+1
@@ -536,15 +535,15 @@ def cut_save(video_id, cut_point, frames, video_info, dest_path):
     # --------------------------------------------------
     # diff_images = [aft - bef for bef, aft in zip(frames, frames[1:])]   # 差分画像
     # diff_rates = [MSE(d) for d in diff_images]  # 差分画像のMSEを変化割合とする
-    # graph_save(frames, dest_path)
+    # save_graph_path = os.path.normpath(os.path.join(dest_path, 'change_rate_graph.jpg'))
+    # graph_save(diff_rates, save_graph_path)
 
-def cut_segmentation(video_path, result_cut_path):
+def cut_segmentation(video_id_list, video_path, cut_path, cut_point_path):
     """
     カット分割を行い、各カットをフォルダに保存する関数
     
     以下の流れで行う
     
-    動画IDリストの作成
     カット分割
         保存先フォルダの作成 
         動画の読み込み、フレームデータ，動画情報の抽出
@@ -553,30 +552,36 @@ def cut_segmentation(video_path, result_cut_path):
 
     Parameters
     ----------
-    video_path : str
-        入力する動画データのフォルダパス
+    video_id_list: list
+        処理対象の動画リスト
 
-    result_cut_path
-        カット分割結果を保存するフォルダパス
+    video_path : str
+        動画データが存在するフォルダパス
+
+    cut_path : str
+        カット分割結果（動画）を保存するフォルダパス
+    
+    cut_point_path : str
+        カット分割結果（カット点）を保存するファイルパス（.csv）
     """
     # --------------------------------------------------
-    # 動画IDリストの作成
+    # カットの保存先フォルダの作成
     # --------------------------------------------------
-    files = os.listdir(video_path)  # 動画ファイル名（動画ID）一覧を取得
-    video_id_list = [f.replace('.mp4', '') for f in files]  # 一覧から拡張子を削除
-    print(video_id_list)
+    create_dest_folder(cut_path)    # フォルダ作成
+    
     # --------------------------------------------------
     # カット分割
     # --------------------------------------------------
     cut_point_list = [] # カット点のリスト
     for video_id in video_id_list:
-        input_video_path = video_path + '\\' + video_id + '.mp4' # 動画ファイルの入力パス 
-        
+        file_name = video_id + EXTENSION    # ファイル名.拡張子
+        input_video_path = os.path.normpath(os.path.join(video_path, file_name)) # 動画ファイルの入力パス 
+
         # --------------------------------------------------
         # 保存先フォルダの作成
         # --------------------------------------------------
-        dest_path = os.path.join(result_cut_path, video_id) # 各動画のカット分割結果の保存先
-        dest_folder_create(dest_path)   # フォルダ作成 
+        dest_path = os.path.normpath(os.path.join(cut_path, video_id))  # 各動画のカット分割結果の保存先
+        create_dest_folder(dest_path, is_create_newly=True)             # フォルダ新規作成 
         
         # --------------------------------------------------
         # 動画の読み込み、フレームデータと動画情報を抽出
@@ -592,13 +597,9 @@ def cut_segmentation(video_path, result_cut_path):
         # --------------------------------------------------
         # カット点の情報を使用して、動画を分割して保存
         # --------------------------------------------------
-        cut_save(video_id, cut_point, frames, video_info, dest_path)
+        save_cut(video_id, cut_point, frames, video_info, dest_path)
     
     # --------------------------------------------------
     # カット点のリストをCSVファイルに保存（後の処理で再使用するため）
     # --------------------------------------------------
-    base_path = os.path.dirname(os.path.abspath(__file__))  # スクリプト実行ディレクトリ
-    result_cut_point_path = os.path.normpath(os.path.join(base_path, 'Result\cut_point.csv'))   # カット点データの保存ファイル
-
-    write_csv([video_id_list, cut_point_list], result_cut_point_path)
-
+    write_csv([video_id_list, cut_point_list], cut_point_path)
