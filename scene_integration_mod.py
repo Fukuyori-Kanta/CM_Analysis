@@ -6,7 +6,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from logging import getLogger, StreamHandler, DEBUG
 import cv2
 
-from file_io import read_csv, write_csv, dest_folder_create
+from file_io import read_csv, write_csv, create_dest_folder
 from cut_segmentation_mod import read_video_data
 
 # ログ設定
@@ -107,7 +107,7 @@ def save_scene(scene_point_dic):
     video_path = os.path.normpath(os.path.join(base, r'Data\Movie'))    # 動画パス
     
     # シーン保存先のフォルダを作成
-    dest_folder_create(result_scene_path)
+    create_dest_folder(result_scene_path)
 
     # --------------------------------------------------
     # 動画IDリストの作成
@@ -126,7 +126,7 @@ def save_scene(scene_point_dic):
         # 保存先フォルダの作成
         # --------------------------------------------------
         dest_path = os.path.join(result_scene_path, video_id) # 各動画のカット分割結果の保存先
-        dest_folder_create(dest_path)   # フォルダ作成 
+        create_dest_folder(dest_path)   # フォルダ作成 
         
         # --------------------------------------------------
         # 動画の読み込み、フレームデータと動画情報を抽出

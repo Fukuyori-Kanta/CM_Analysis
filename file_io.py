@@ -2,10 +2,23 @@ import csv
 import os
 import shutil
 
-def getEncode(filepath):
-    encs = "iso-2022-jp euc-jp sjis utf-8-sig".split()
+def getEncode(file_path):
+    """
+    読み込んだファイルが対応している文字コードを返す関数
+
+    Parameters
+    ----------
+    file_path : str
+        読み込むファイルのパス
+
+    Returns
+    -------
+    enc : str
+        ファイルの文字コード
+    """
+    encs = ["iso-2022-jp", "euc-jp", "sjis", "utf-8-sig"]
     for enc in encs:
-        with open(filepath, encoding=enc) as fr:
+        with open(file_path, encoding=enc) as fr:
             try:
                 fr = fr.read()
             except UnicodeDecodeError:
@@ -121,7 +134,7 @@ def write_ranking_data(data, dest_path, i):
 
         writer.writerows(data)
 
-def dest_folder_create(dest_path):
+def create_dest_folder(dest_path, is_create_newly=False):
     """
     保存先フォルダを作成する関数
 
@@ -129,9 +142,15 @@ def dest_folder_create(dest_path):
     ----------
     dest_path : str
         保存先フォルダのパス
+    
+    is_create_newly : bool, default False
+        新規に作成するかどうか
     """
-    # 保存先フォルダの作成
-    # 既に存在する場合は削除
-    if os.path.exists(dest_path):
+    # 存在しない場合は作成
+    if not os.path.exists(dest_path):
+        os.mkdir(dest_path)     # 保存先フォルダの作成
+        
+    # 既に存在する かつ 新規に作成する場合は削除してから作成
+    if os.path.exists(dest_path) and is_create_newly:
         shutil.rmtree(dest_path)    # フォルダ削除
-    os.mkdir(dest_path)     # 保存先フォルダの作成
+        os.mkdir(dest_path)         # 保存先フォルダの作成
