@@ -1,0 +1,252 @@
+2022-12-01 19:04:59,814 - DEBUG - main.py - config.setting - <module> - 各種設定が完了しました。
+2022-12-01 19:04:59,867 - DEBUG - main.py - config.setting - <module> - CMデータを読み込みました。
+2022-12-01 19:04:59,868 - DEBUG - main.py - config.setting - <module> - 入力元 : C:\Users\fukuyori\CM_Analysis\data\csv\top1000.csv
+2022-12-01 19:04:59,868 - DEBUG - main.py - config.setting - <module> - 入力元 : C:\Users\fukuyori\CM_Analysis\data\csv\btm1000.csv
+2022-12-01 19:04:59,868 - DEBUG - main.py - config.setting - <module> - --------------------------------------------------
+2022-12-01 19:05:50,657 - DEBUG - main.py - __main__ - <module> - 各種設定が完了しました。
+2022-12-01 19:05:50,705 - DEBUG - main.py - __main__ - <module> - CMデータを読み込みました。
+2022-12-01 19:05:50,705 - DEBUG - main.py - __main__ - <module> - 入力元 : C:\Users\fukuyori\CM_Analysis\data\csv\top1000.csv
+2022-12-01 19:05:50,705 - DEBUG - main.py - __main__ - <module> - 入力元 : C:\Users\fukuyori\CM_Analysis\data\csv\btm1000.csv
+2022-12-01 19:05:50,705 - DEBUG - main.py - __main__ - <module> - --------------------------------------------------
+2022-12-01 19:06:26,019 - DEBUG - main.py - __main__ - <module> - 各種設定が完了しました。
+2022-12-01 19:06:26,068 - DEBUG - main.py - __main__ - <module> - CMデータを読み込みました。
+2022-12-01 19:06:26,068 - DEBUG - main.py - __main__ - <module> - 入力元 : C:\Users\fukuyori\CM_Analysis\data\csv\top1000.csv
+2022-12-01 19:06:26,068 - DEBUG - main.py - __main__ - <module> - 入力元 : C:\Users\fukuyori\CM_Analysis\data\csv\btm1000.csv
+2022-12-01 19:06:26,068 - DEBUG - main.py - __main__ - <module> - --------------------------------------------------
+2022-12-01 19:07:33,456 - DEBUG - main.py - __main__ - <module> - 各種設定が完了しました。
+2022-12-01 19:09:43,642 - DEBUG - main.py - __main__ - <module> - 各種設定が完了しました。
+2022-12-01 19:13:42,488 - DEBUG - main.py - __main__ - <module> - 各種設定が完了しました。
+2022-12-01 19:14:07,733 - DEBUG - main.py - __main__ - <module> - 各種設定が完了しました。
+2022-12-01 19:17:20,162 - DEBUG - main.py - __main__ - <module> - 各種設定が完了しました。
+2022-12-01 19:17:20,212 - DEBUG - main.py - __main__ - <module> - CMデータを読み込みました。
+2022-12-01 19:17:20,213 - DEBUG - main.py - __main__ - <module> - 入力元 : C:\Users\fukuyori\CM_Analysis\data\csv\top1000.csv
+2022-12-01 19:17:20,213 - DEBUG - main.py - __main__ - <module> - 入力元 : C:\Users\fukuyori\CM_Analysis\data\csv\btm1000.csv
+2022-12-01 19:17:20,213 - DEBUG - main.py - __main__ - <module> - --------------------------------------------------
+2022-12-01 19:39:58,801 - DEBUG - main.py - __main__ - <module> - 各種設定が完了しました。
+2022-12-01 19:39:58,856 - DEBUG - main.py - __main__ - <module> - CMデータを読み込みました。
+2022-12-01 19:39:58,856 - DEBUG - main.py - __main__ - <module> - 入力元 : C:\Users\fukuyori\CM_Analysis\data\csv\top1000.csv
+2022-12-01 19:39:58,857 - DEBUG - main.py - __main__ - <module> - 入力元 : C:\Users\fukuyori\CM_Analysis\data\csv\btm1000.csv
+2022-12-01 19:39:58,857 - DEBUG - main.py - __main__ - <module> - --------------------------------------------------
+2022-12-01 19:39:58,857 - DEBUG - main.py - __main__ - <module> - カット分割を開始します。
+2022-12-01 19:41:12,543 - DEBUG - main.py - __main__ - <module> - 各種設定が完了しました。
+2022-12-01 19:41:12,589 - DEBUG - main.py - __main__ - <module> - CMデータを読み込みました。
+2022-12-01 19:41:12,590 - DEBUG - main.py - __main__ - <module> - 入力元 : C:\Users\fukuyori\CM_Analysis\data\csv\top1000.csv
+2022-12-01 19:41:12,590 - DEBUG - main.py - __main__ - <module> - 入力元 : C:\Users\fukuyori\CM_Analysis\data\csv\btm1000.csv
+2022-12-01 19:41:12,591 - DEBUG - main.py - __main__ - <module> - --------------------------------------------------
+2022-12-01 19:41:12,591 - DEBUG - main.py - __main__ - <module> - カット分割を開始します。
+2022-12-01 19:42:02,957 - DEBUG - main.py - __main__ - <module> - 各種設定が完了しました。
+2022-12-01 19:42:03,006 - DEBUG - main.py - __main__ - <module> - CMデータを読み込みました。
+2022-12-01 19:42:03,006 - DEBUG - main.py - __main__ - <module> - 入力元 : C:\Users\fukuyori\CM_Analysis\data\csv\top1000.csv
+2022-12-01 19:42:03,006 - DEBUG - main.py - __main__ - <module> - 入力元 : C:\Users\fukuyori\CM_Analysis\data\csv\btm1000.csv
+2022-12-01 19:42:03,007 - DEBUG - main.py - __main__ - <module> - --------------------------------------------------
+2022-12-01 19:42:03,008 - DEBUG - main.py - __main__ - <module> - カット分割を開始します。
+2022-12-01 19:42:09,776 - DEBUG - main.py - __main__ - <module> - 全動画のカット分割が終了しました。
+2022-12-01 19:42:09,777 - DEBUG - main.py - __main__ - <module> - --------------------------------------------------
+2022-12-01 19:42:09,777 - DEBUG - main.py - __main__ - <module> - カット画像生成を開始します。
+2022-12-01 19:42:12,718 - DEBUG - main.py - __main__ - <module> - 全カットのカット画像生成が終了しました。
+2022-12-01 19:42:12,718 - DEBUG - main.py - __main__ - <module> - --------------------------------------------------
+2022-12-01 20:22:09,618 - DEBUG - main.py - __main__ - <module> - 各種設定が完了しました。
+2022-12-01 20:22:09,680 - DEBUG - main.py - __main__ - <module> - CMデータを読み込みました。
+2022-12-01 20:22:09,680 - DEBUG - main.py - __main__ - <module> - 入力元 : C:\Users\fukuyori\CM_Analysis\data\csv\top1000.csv
+2022-12-01 20:22:09,681 - DEBUG - main.py - __main__ - <module> - 入力元 : C:\Users\fukuyori\CM_Analysis\data\csv\btm1000.csv
+2022-12-01 20:22:09,681 - DEBUG - main.py - __main__ - <module> - --------------------------------------------------
+2022-12-01 20:22:09,682 - DEBUG - main.py - __main__ - <module> - カット分割を開始します。
+2022-12-01 20:22:10,761 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - I201070636_cut1 ～ 3を保存しました
+2022-12-01 20:22:10,763 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut\I201070636
+2022-12-01 20:22:10,763 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - --------------------------------------------------
+2022-12-01 20:22:11,435 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - G201066303_cut1 ～ 17を保存しました
+2022-12-01 20:22:11,435 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut\G201066303
+2022-12-01 20:22:11,436 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - --------------------------------------------------
+2022-12-01 20:22:11,986 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - J201072971_cut1 ～ 5を保存しました
+2022-12-01 20:22:11,987 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut\J201072971
+2022-12-01 20:22:11,987 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - --------------------------------------------------
+2022-12-01 20:22:13,067 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - J201072195_cut1 ～ 16を保存しました
+2022-12-01 20:22:13,067 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut\J201072195
+2022-12-01 20:22:13,067 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - --------------------------------------------------
+2022-12-01 20:22:13,642 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - D201062124_cut1 ～ 10を保存しました
+2022-12-01 20:22:13,642 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut\D201062124
+2022-12-01 20:22:13,642 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - --------------------------------------------------
+2022-12-01 20:22:13,660 - DEBUG - main.py - __main__ - <module> - 全動画のカット分割が終了しました。
+2022-12-01 20:22:13,661 - DEBUG - main.py - __main__ - <module> - --------------------------------------------------
+2022-12-01 20:22:13,661 - DEBUG - main.py - __main__ - <module> - カット画像生成を開始します。
+2022-12-01 20:22:14,055 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - I201070636_cut_img1 ～ 3を保存しました
+2022-12-01 20:22:14,055 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut_img\I201070636
+2022-12-01 20:22:14,055 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - --------------------------------------------------
+2022-12-01 20:22:14,342 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - G201066303_cut_img1 ～ 17を保存しました
+2022-12-01 20:22:14,343 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut_img\G201066303
+2022-12-01 20:22:14,343 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - --------------------------------------------------
+2022-12-01 20:22:14,573 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - J201072971_cut_img1 ～ 5を保存しました
+2022-12-01 20:22:14,573 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut_img\J201072971
+2022-12-01 20:22:14,573 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - --------------------------------------------------
+2022-12-01 20:22:15,100 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - J201072195_cut_img1 ～ 16を保存しました
+2022-12-01 20:22:15,101 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut_img\J201072195
+2022-12-01 20:22:15,101 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - --------------------------------------------------
+2022-12-01 20:22:15,375 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - D201062124_cut_img1 ～ 10を保存しました
+2022-12-01 20:22:15,375 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut_img\D201062124
+2022-12-01 20:22:15,375 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - --------------------------------------------------
+2022-12-01 20:22:15,406 - DEBUG - main.py - __main__ - <module> - 全カットのカット画像生成が終了しました。
+2022-12-01 20:22:15,406 - DEBUG - main.py - __main__ - <module> - --------------------------------------------------
+2022-12-01 20:36:16,842 - DEBUG - main.py - __main__ - <module> - 各種設定が完了しました。
+2022-12-01 20:36:16,917 - DEBUG - main.py - __main__ - <module> - CMデータを読み込みました。
+2022-12-01 20:36:16,918 - DEBUG - main.py - __main__ - <module> - 入力元 : C:\Users\fukuyori\CM_Analysis\data\csv\top1000.csv
+2022-12-01 20:36:16,918 - DEBUG - main.py - __main__ - <module> - 入力元 : C:\Users\fukuyori\CM_Analysis\data\csv\btm1000.csv
+2022-12-01 20:36:16,918 - DEBUG - main.py - __main__ - <module> - --------------------------------------------------
+2022-12-01 20:36:16,919 - DEBUG - main.py - __main__ - <module> - カット分割を開始します。
+2022-12-01 20:36:17,988 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - I201070636_cut1 ～ 3を保存しました
+2022-12-01 20:36:17,988 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut\I201070636
+2022-12-01 20:36:17,988 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - --------------------------------------------------
+2022-12-01 20:36:18,677 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - G201066303_cut1 ～ 17を保存しました
+2022-12-01 20:36:18,677 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut\G201066303
+2022-12-01 20:36:18,678 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - --------------------------------------------------
+2022-12-01 20:36:19,215 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - J201072971_cut1 ～ 5を保存しました
+2022-12-01 20:36:19,216 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut\J201072971
+2022-12-01 20:36:19,216 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - --------------------------------------------------
+2022-12-01 20:36:20,317 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - J201072195_cut1 ～ 16を保存しました
+2022-12-01 20:36:20,317 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut\J201072195
+2022-12-01 20:36:20,317 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - --------------------------------------------------
+2022-12-01 20:36:20,914 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - D201062124_cut1 ～ 10を保存しました
+2022-12-01 20:36:20,914 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut\D201062124
+2022-12-01 20:36:20,914 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - --------------------------------------------------
+2022-12-01 20:36:20,933 - DEBUG - main.py - __main__ - <module> - 全動画のカット分割が終了しました。
+2022-12-01 20:36:20,933 - DEBUG - main.py - __main__ - <module> - --------------------------------------------------
+2022-12-01 20:36:20,933 - DEBUG - main.py - __main__ - <module> - カット画像生成を開始します。
+2022-12-01 20:36:21,322 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - I201070636_cut_img1 ～ 3を保存しました
+2022-12-01 20:36:21,322 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut_img\I201070636
+2022-12-01 20:36:21,323 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - --------------------------------------------------
+2022-12-01 20:36:21,622 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - G201066303_cut_img1 ～ 17を保存しました
+2022-12-01 20:36:21,622 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut_img\G201066303
+2022-12-01 20:36:21,623 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - --------------------------------------------------
+2022-12-01 20:36:21,834 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - J201072971_cut_img1 ～ 5を保存しました
+2022-12-01 20:36:21,835 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut_img\J201072971
+2022-12-01 20:36:21,835 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - --------------------------------------------------
+2022-12-01 20:36:22,387 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - J201072195_cut_img1 ～ 16を保存しました
+2022-12-01 20:36:22,388 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut_img\J201072195
+2022-12-01 20:36:22,389 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - --------------------------------------------------
+2022-12-01 20:36:22,742 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - D201062124_cut_img1 ～ 10を保存しました
+2022-12-01 20:36:22,742 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut_img\D201062124
+2022-12-01 20:36:22,742 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - --------------------------------------------------
+2022-12-01 20:36:22,782 - DEBUG - main.py - __main__ - <module> - 全カットのカット画像生成が終了しました。
+2022-12-01 20:36:22,782 - DEBUG - main.py - __main__ - <module> - --------------------------------------------------
+2022-12-01 20:41:03,086 - DEBUG - main.py - __main__ - <module> - 各種設定が完了しました。
+2022-12-01 20:41:03,135 - DEBUG - main.py - __main__ - <module> - CMデータを読み込みました。
+2022-12-01 20:41:03,136 - DEBUG - main.py - __main__ - <module> - 入力元 : C:\Users\fukuyori\CM_Analysis\data\csv\top1000.csv
+2022-12-01 20:41:03,136 - DEBUG - main.py - __main__ - <module> - 入力元 : C:\Users\fukuyori\CM_Analysis\data\csv\btm1000.csv
+2022-12-01 20:41:03,136 - DEBUG - main.py - __main__ - <module> - --------------------------------------------------
+2022-12-01 20:41:03,137 - DEBUG - main.py - __main__ - <module> - カット分割を開始します。
+2022-12-01 20:41:04,142 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - I201070636_cut1 ～ 3を保存しました
+2022-12-01 20:41:04,142 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut\I201070636
+2022-12-01 20:41:04,142 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - --------------------------------------------------
+2022-12-01 20:41:04,854 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - G201066303_cut1 ～ 17を保存しました
+2022-12-01 20:41:04,854 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut\G201066303
+2022-12-01 20:41:04,854 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - --------------------------------------------------
+2022-12-01 20:41:05,393 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - J201072971_cut1 ～ 5を保存しました
+2022-12-01 20:41:05,394 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut\J201072971
+2022-12-01 20:41:05,394 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - --------------------------------------------------
+2022-12-01 20:41:06,461 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - J201072195_cut1 ～ 16を保存しました
+2022-12-01 20:41:06,461 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut\J201072195
+2022-12-01 20:41:06,461 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - --------------------------------------------------
+2022-12-01 20:41:07,039 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - D201062124_cut1 ～ 10を保存しました
+2022-12-01 20:41:07,039 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut\D201062124
+2022-12-01 20:41:07,040 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - --------------------------------------------------
+2022-12-01 20:41:07,057 - DEBUG - main.py - __main__ - <module> - 全動画のカット分割が終了しました。
+2022-12-01 20:41:07,057 - DEBUG - main.py - __main__ - <module> - --------------------------------------------------
+2022-12-01 20:41:07,058 - DEBUG - main.py - __main__ - <module> - カット画像生成を開始します。
+2022-12-01 20:41:07,432 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - I201070636_cut_img1 ～ 3を保存しました
+2022-12-01 20:41:07,433 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut_img\I201070636
+2022-12-01 20:41:07,433 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - --------------------------------------------------
+2022-12-01 20:41:07,718 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - G201066303_cut_img1 ～ 17を保存しました
+2022-12-01 20:41:07,719 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut_img\G201066303
+2022-12-01 20:41:07,719 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - --------------------------------------------------
+2022-12-01 20:41:07,957 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - J201072971_cut_img1 ～ 5を保存しました
+2022-12-01 20:41:07,958 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut_img\J201072971
+2022-12-01 20:41:07,958 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - --------------------------------------------------
+2022-12-01 20:41:08,433 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - J201072195_cut_img1 ～ 16を保存しました
+2022-12-01 20:41:08,434 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut_img\J201072195
+2022-12-01 20:41:08,434 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - --------------------------------------------------
+2022-12-01 20:41:08,693 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - D201062124_cut_img1 ～ 10を保存しました
+2022-12-01 20:41:08,694 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut_img\D201062124
+2022-12-01 20:41:08,694 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - --------------------------------------------------
+2022-12-01 20:41:08,712 - DEBUG - main.py - __main__ - <module> - 全カットのカット画像生成が終了しました。
+2022-12-01 20:41:08,712 - DEBUG - main.py - __main__ - <module> - --------------------------------------------------
+2022-12-01 20:48:45,188 - DEBUG - main.py - __main__ - <module> - 各種設定が完了しました。
+2022-12-01 20:48:45,238 - DEBUG - main.py - __main__ - <module> - CMデータを読み込みました。
+2022-12-01 20:48:45,238 - DEBUG - main.py - __main__ - <module> - 入力元 : C:\Users\fukuyori\CM_Analysis\data\csv\top1000.csv
+2022-12-01 20:48:45,239 - DEBUG - main.py - __main__ - <module> - 入力元 : C:\Users\fukuyori\CM_Analysis\data\csv\btm1000.csv
+2022-12-01 20:48:45,239 - DEBUG - main.py - __main__ - <module> - --------------------------------------------------
+2022-12-01 20:48:45,239 - DEBUG - main.py - __main__ - <module> - カット分割を開始します。
+2022-12-01 20:48:46,249 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - I201070636_cut1 ～ 3を保存しました
+2022-12-01 20:48:46,249 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut\I201070636
+2022-12-01 20:48:46,249 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - --------------------------------------------------
+2022-12-01 20:48:46,984 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - G201066303_cut1 ～ 17を保存しました
+2022-12-01 20:48:46,984 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut\G201066303
+2022-12-01 20:48:46,984 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - --------------------------------------------------
+2022-12-01 20:48:47,528 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - J201072971_cut1 ～ 5を保存しました
+2022-12-01 20:48:47,529 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut\J201072971
+2022-12-01 20:48:47,529 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - --------------------------------------------------
+2022-12-01 20:48:48,644 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - J201072195_cut1 ～ 16を保存しました
+2022-12-01 20:48:48,644 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut\J201072195
+2022-12-01 20:48:48,644 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - --------------------------------------------------
+2022-12-01 20:48:49,233 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - D201062124_cut1 ～ 10を保存しました
+2022-12-01 20:48:49,233 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut\D201062124
+2022-12-01 20:48:49,233 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - --------------------------------------------------
+2022-12-01 20:48:49,251 - DEBUG - main.py - __main__ - <module> - 全動画のカット分割が終了しました。
+2022-12-01 20:48:49,252 - DEBUG - main.py - __main__ - <module> - --------------------------------------------------
+2022-12-01 20:48:49,252 - DEBUG - main.py - __main__ - <module> - カット画像生成を開始します。
+2022-12-01 20:48:49,625 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - I201070636_cut_img1 ～ 3を保存しました
+2022-12-01 20:48:49,625 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut_img\I201070636
+2022-12-01 20:48:49,625 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - --------------------------------------------------
+2022-12-01 20:48:49,919 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - G201066303_cut_img1 ～ 17を保存しました
+2022-12-01 20:48:49,919 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut_img\G201066303
+2022-12-01 20:48:49,919 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - --------------------------------------------------
+2022-12-01 20:48:50,153 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - J201072971_cut_img1 ～ 5を保存しました
+2022-12-01 20:48:50,153 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut_img\J201072971
+2022-12-01 20:48:50,153 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - --------------------------------------------------
+2022-12-01 20:48:50,629 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - J201072195_cut_img1 ～ 16を保存しました
+2022-12-01 20:48:50,630 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut_img\J201072195
+2022-12-01 20:48:50,630 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - --------------------------------------------------
+2022-12-01 20:48:50,902 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - D201062124_cut_img1 ～ 10を保存しました
+2022-12-01 20:48:50,902 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut_img\D201062124
+2022-12-01 20:48:50,902 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - --------------------------------------------------
+2022-12-01 20:48:50,931 - DEBUG - main.py - __main__ - <module> - 全カットのカット画像生成が終了しました。
+2022-12-01 20:48:50,931 - DEBUG - main.py - __main__ - <module> - --------------------------------------------------
+2022-12-04 23:22:11,259 - DEBUG - main.py - __main__ - <module> - 各種設定が完了しました。
+2022-12-04 23:22:11,344 - DEBUG - main.py - __main__ - <module> - CMデータを読み込みました。
+2022-12-04 23:22:11,344 - DEBUG - main.py - __main__ - <module> - 入力元 : C:\Users\fukuyori\CM_Analysis\data\csv\top1000.csv
+2022-12-04 23:22:11,345 - DEBUG - main.py - __main__ - <module> - 入力元 : C:\Users\fukuyori\CM_Analysis\data\csv\btm1000.csv
+2022-12-04 23:22:11,345 - DEBUG - main.py - __main__ - <module> - --------------------------------------------------
+2022-12-04 23:22:11,345 - DEBUG - main.py - __main__ - <module> - カット分割を開始します。
+2022-12-04 23:22:12,576 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - I201070636_cut1 ～ 3を保存しました
+2022-12-04 23:22:12,577 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut\I201070636
+2022-12-04 23:22:12,577 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - --------------------------------------------------
+2022-12-04 23:22:13,269 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - G201066303_cut1 ～ 17を保存しました
+2022-12-04 23:22:13,269 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut\G201066303
+2022-12-04 23:22:13,270 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - --------------------------------------------------
+2022-12-04 23:22:13,829 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - J201072971_cut1 ～ 5を保存しました
+2022-12-04 23:22:13,829 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut\J201072971
+2022-12-04 23:22:13,829 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - --------------------------------------------------
+2022-12-04 23:22:14,945 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - J201072195_cut1 ～ 16を保存しました
+2022-12-04 23:22:14,945 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut\J201072195
+2022-12-04 23:22:14,946 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - --------------------------------------------------
+2022-12-04 23:22:15,596 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - D201062124_cut1 ～ 10を保存しました
+2022-12-04 23:22:15,596 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut\D201062124
+2022-12-04 23:22:15,597 - DEBUG - cut_segmentation_mod.py - utils.cut_segmentation_mod - save_cut - --------------------------------------------------
+2022-12-04 23:22:15,626 - DEBUG - main.py - __main__ - <module> - 全動画のカット分割が終了しました。
+2022-12-04 23:22:15,627 - DEBUG - main.py - __main__ - <module> - --------------------------------------------------
+2022-12-04 23:22:15,627 - DEBUG - main.py - __main__ - <module> - カット画像生成を開始します。
+2022-12-04 23:22:16,065 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - I201070636_cut_img1 ～ 3を保存しました
+2022-12-04 23:22:16,066 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut_img\I201070636
+2022-12-04 23:22:16,066 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - --------------------------------------------------
+2022-12-04 23:22:16,382 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - G201066303_cut_img1 ～ 17を保存しました
+2022-12-04 23:22:16,382 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut_img\G201066303
+2022-12-04 23:22:16,382 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - --------------------------------------------------
+2022-12-04 23:22:16,619 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - J201072971_cut_img1 ～ 5を保存しました
+2022-12-04 23:22:16,620 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut_img\J201072971
+2022-12-04 23:22:16,620 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - --------------------------------------------------
+2022-12-04 23:22:17,111 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - J201072195_cut_img1 ～ 16を保存しました
+2022-12-04 23:22:17,111 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut_img\J201072195
+2022-12-04 23:22:17,112 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - --------------------------------------------------
+2022-12-04 23:22:17,381 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - D201062124_cut_img1 ～ 10を保存しました
+2022-12-04 23:22:17,381 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - 保存先 : C:\Users\fukuyori\CM_Analysis\result1\cut_img\D201062124
+2022-12-04 23:22:17,381 - DEBUG - cut_img_generate_mod.py - utils.cut_img_generate_mod - cut_img_save - --------------------------------------------------
+2022-12-04 23:22:17,402 - DEBUG - main.py - __main__ - <module> - 全カットのカット画像生成が終了しました。
+2022-12-04 23:22:17,402 - DEBUG - main.py - __main__ - <module> - --------------------------------------------------

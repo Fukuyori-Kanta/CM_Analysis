@@ -9,18 +9,15 @@
 """
 import os
 import os.path
-from logging import getLogger, StreamHandler, DEBUG
 
-from setting import set_path
-from file_io import read_csv
-from cut_segmentation_mod import cut_segmentation
-from cut_img_generate_mod import cut_img_generate
+from utils.setting import setup_path, setup_logger
+from utils.file_io import read_csv
+from utils.cut_segmentation_mod import cut_segmentation
+from utils.cut_img_generate_mod import cut_img_generate
+
 # from label_shaping_mod import label_shaping
 # from scene_integration_mod import scene_integration
 # from analysis_mod import favo_analysis
-
-# 設定ファイル
-INI_FILE = 'settings.ini'
 
 if __name__ == '__main__':
     # --------------------------------------------------
@@ -32,17 +29,12 @@ if __name__ == '__main__':
         # --------------------------------------------------
         # スクリプト実行ディレクトリ（[main.py] のディレクトリ）に変更
         os.chdir(os.path.dirname(os.path.abspath(__file__)))  
-        
+
         # ログ設定
-        logger = getLogger(__name__)
-        handler = StreamHandler()
-        handler.setLevel(DEBUG)
-        logger.setLevel(DEBUG)
-        logger.addHandler(handler)
-        logger.propagate = False
+        logger = setup_logger(__name__)
 
         # パス設定
-        root_path, video_path, cmData_top_path, cmData_btm_path, cut_path, cut_img_path, cut_point_path = set_path(INI_FILE) 
+        root_path, video_path, cmData_top_path, cmData_btm_path, cut_path, cut_img_path, cut_point_path = setup_path() 
 
         # ルートディレクトリではないとき作業ディレクトリを変更
         if os.getcwd() == root_path:

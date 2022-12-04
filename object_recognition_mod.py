@@ -6,7 +6,7 @@ import time
 import os
 from logging import getLogger, StreamHandler, DEBUG
 
-from file_io import write_csv
+from utils.file_io import write_csv
 
 # プロキシ設定
 #os.environ["https_proxy"] = "http://wwwproxy.kanazawa-it.ac.jp:8080"
@@ -126,6 +126,6 @@ def object_recognition(result_cut_img_path, result_noun_path):
 if __name__ == '__main__':
     start = time.time()
     #exe()
-    object_recognition(r'C:\Users\fukuyori\Result\Cut_Img', r'C:\Users\fukuyori\OneDrive\デスクトップ\研究\CM_Analysis\noun3.csv')
+    object_recognition(r'C:\Users\fukuyori\result\cut_img', r'C:\Users\fukuyori\OneDrive\デスクトップ\研究\CM_Analysis\noun3.csv')
     elapsed_time = time.time() - start
     print ("elapsed_time:{0}".format(elapsed_time) + "[sec]")

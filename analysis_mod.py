@@ -5,7 +5,7 @@ import heapq
 import numpy as np
 import re
 
-from file_io import read_csv, read_favo, write_ranking_data, write_csv
+from utils.file_io import read_csv, read_favo, write_ranking_data, write_csv
 
 def order_desc(dic, N):
     # valueでソートしたときの上位N個
@@ -161,13 +161,13 @@ def ranking(scene_favo_dic, scene_dic, i, result_path):
 def favo_analysis():
     # パス設定
     base = os.path.dirname(os.path.abspath(__file__))   # スクリプト実行ディレクトリ    
-    scene_path = os.path.normpath(os.path.join(base, r'Result\Label\result_label.csv'))  # シーンデータのパス
-    favo_path = os.path.normpath(os.path.join(base, r'Data\好感度データ\favorability_data.csv'))  # 好感度データのパス
-    label_path = os.path.normpath(os.path.join(base, r'Result\Label\result_label.csv'))  # ラベルデータのパス
-    video_path = os.path.normpath(os.path.join(base, r'Data\Movie'))    # 動画データのパス
-    result_path = os.path.normpath(os.path.join(base, r'Result\Favo'))  # 各好感要因の結果格納パス
-    result_ALL_path = os.path.normpath(os.path.join(base, r'Result\Favo\result_data_ALL.csv'))  # 全シーン，全好感要因の結果格納パス
-    rank_ALL_path = os.path.normpath(os.path.join(base, r'Result\Favo\rank_data_ALL.csv'))     # 全好感要因のランキング結果格納パス
+    scene_path = os.path.normpath(os.path.join(base, r'result\Label\result_label.csv'))  # シーンデータのパス
+    favo_path = os.path.normpath(os.path.join(base, r'data\好感度データ\favorability_data.csv'))  # 好感度データのパス
+    label_path = os.path.normpath(os.path.join(base, r'result\Label\result_label.csv'))  # ラベルデータのパス
+    video_path = os.path.normpath(os.path.join(base, r'data\movie'))    # 動画データのパス
+    result_path = os.path.normpath(os.path.join(base, r'result\Favo'))  # 各好感要因の結果格納パス
+    result_ALL_path = os.path.normpath(os.path.join(base, r'result\Favo\result_data_ALL.csv'))  # 全シーン，全好感要因の結果格納パス
+    rank_ALL_path = os.path.normpath(os.path.join(base, r'result\Favo\rank_data_ALL.csv'))     # 全好感要因のランキング結果格納パス
 
     # 場面データの読み込み
     scene_data = read_csv(scene_path, True)

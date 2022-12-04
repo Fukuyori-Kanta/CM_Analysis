@@ -2,7 +2,7 @@ import json
 import os 
 import ast
 
-from file_io import read_csv, write_csv
+from utils.file_io import read_csv, write_csv
 
 # テキストファイルの読み込み
 def read_txt(path):
@@ -22,11 +22,11 @@ def trans_dic_creation(label_list_en, label_list_ja):
 # 名詞ラベルの整形
 def noun_label_shaping():
     base_path = os.path.dirname(os.path.abspath(__file__))  # スクリプト実行ディレクトリ
-    noun_result_path = os.path.normpath(os.path.join(base_path, r'Result\Label\noun_label.csv'))   # 物体認識のラベル結果（名詞ラベル）
-    video_path = os.path.normpath(os.path.join(base_path, r'Data\Movie'))                          # 動画データのパス
-    noun_en_path = os.path.normpath(os.path.join(base_path, r'Data\Label\noun_label(en).txt'))     # データセットのラベル群（英語）
-    noun_ja_path = os.path.normpath(os.path.join(base_path, r'Data\Label\noun_label(ja).txt'))     # データセットのラベル群（日本語）
-    trans_table_path = os.path.normpath(os.path.join(base_path, r'Data\Label\noun_screening.csv')) # スクリーニング用の対応表
+    noun_result_path = os.path.normpath(os.path.join(base_path, r'result\Label\noun_label.csv'))   # 物体認識のラベル結果（名詞ラベル）
+    video_path = os.path.normpath(os.path.join(base_path, r'data\movie'))                          # 動画データのパス
+    noun_en_path = os.path.normpath(os.path.join(base_path, r'data\Label\noun_label(en).txt'))     # データセットのラベル群（英語）
+    noun_ja_path = os.path.normpath(os.path.join(base_path, r'data\Label\noun_label(ja).txt'))     # データセットのラベル群（日本語）
+    trans_table_path = os.path.normpath(os.path.join(base_path, r'data\Label\noun_screening.csv')) # スクリーニング用の対応表
         
     # ラベル一覧を読み込み（英語、日本語）
     noun_label_en = read_txt(noun_en_path)
@@ -66,10 +66,10 @@ def noun_label_shaping():
 # 動詞ラベルの整形
 def verb_label_shaping():
     base_path = os.path.dirname(os.path.abspath(__file__))  # スクリプト実行ディレクトリ
-    verb_result_path = os.path.normpath(os.path.join(base_path, r'Result\Label\verb_label.json'))  # 動作認識のラベル結果（名詞ラベル）
-    verb_en_path = os.path.normpath(os.path.join(base_path, r'Data\Label\verb_label(en).txt'))     # データセットのラベル群（英語）
-    verb_ja_path = os.path.normpath(os.path.join(base_path, r'Data\Label\verb_label(ja).txt'))     # データセットのラベル群（日本語）
-    trans_table_path = os.path.normpath(os.path.join(base_path, r'Data\Label\verb_screening.csv')) # スクリーニング用の対応表
+    verb_result_path = os.path.normpath(os.path.join(base_path, r'result\Label\verb_label.json'))  # 動作認識のラベル結果（名詞ラベル）
+    verb_en_path = os.path.normpath(os.path.join(base_path, r'data\Label\verb_label(en).txt'))     # データセットのラベル群（英語）
+    verb_ja_path = os.path.normpath(os.path.join(base_path, r'data\Label\verb_label(ja).txt'))     # データセットのラベル群（日本語）
+    trans_table_path = os.path.normpath(os.path.join(base_path, r'data\Label\verb_screening.csv')) # スクリーニング用の対応表
 
     # ラベル一覧を読み込み（英語、日本語）
     verb_label_en = read_txt(verb_en_path)
@@ -153,8 +153,8 @@ def label_shaping():
 
     """
     base_path = os.path.dirname(os.path.abspath(__file__))  # スクリプト実行ディレクトリ
-    cut_point_path = os.path.normpath(os.path.join(base_path, r'Result\cut_point.csv'))   # カット点データ
-    merged_label_path = os.path.normpath(os.path.join(base_path, r'Result\Label\merged_label.csv'))   # 結合ラベルデータ格納パス
+    cut_point_path = os.path.normpath(os.path.join(base_path, r'result\cut_point.csv'))   # カット点データ
+    merged_label_path = os.path.normpath(os.path.join(base_path, r'result\Label\merged_label.csv'))   # 結合ラベルデータ格納パス
     
     # 名詞ラベルの整理
     noun_label = noun_label_shaping()

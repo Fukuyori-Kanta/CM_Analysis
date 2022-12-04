@@ -1,5 +1,5 @@
 # 管理しないフォルダ，ファイル
-Data
-Result
+data
+result
 settings.ini
 __pycache__

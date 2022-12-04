@@ -1,15 +1,15 @@
 import os
 import shutil
 from natsort import natsorted
-from file_io import create_dest_folder
+from utils.file_io import create_dest_folder
 
 # Cut_List, cut_videosを作成する
 # Cut_List : カット（動画）を1つにまとめたフォルダ
 # cut_videos : Cut_Listの動画名をまとめたテキストデータ
 base = os.path.dirname(os.path.abspath(__file__))   # スクリプト実行ディレクトリ
-cut_path = os.path.normpath(os.path.join(base, r'Result\Cut'))  # カット動画のパス
-cut_list_path = os.path.normpath(os.path.join(base, r'Result\Cut_List'))  # カット動画のパス
-cut_videos_path = os.path.normpath(os.path.join(base, r'Result\cut_videos'))  # カット動画のパス
+cut_path = os.path.normpath(os.path.join(base, r'result\cut'))  # カット動画のパス
+cut_list_path = os.path.normpath(os.path.join(base, r'result\Cut_List'))  # カット動画のパス
+cut_videos_path = os.path.normpath(os.path.join(base, r'result\cut_videos'))  # カット動画のパス
 video_id_list = os.listdir(cut_path)   # 動画IDリスト
 
 # [Cut_List]の作成
