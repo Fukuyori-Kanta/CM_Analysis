@@ -36,10 +36,10 @@ def read_csv(file_path, needs_skip_header=False):
 
     needs_skip_header : bool, default False
         ヘッダーを読み飛ばすかどうか
-        
+
     Returns
     -------
-    l : list
+    list
         読み込んだ結果を返すリスト
     """
     # 文字コードを取得
@@ -51,12 +51,8 @@ def read_csv(file_path, needs_skip_header=False):
     # ヘッダーを読み飛ばしたい時
     if needs_skip_header:
         header = next(reader)  
-
-    l = []
-    for row in reader:
-        l.append(row)
-    
-    return l
+        
+    return [row for row in reader]
 
 def read_favo(file_path, needs_skip_header=False):
     """
@@ -72,7 +68,7 @@ def read_favo(file_path, needs_skip_header=False):
         
     Returns
     -------
-    l : list
+    list
         読み込んだ結果を返すリスト
     """
     # 文字コードを取得
@@ -85,11 +81,7 @@ def read_favo(file_path, needs_skip_header=False):
     if needs_skip_header:
         header = next(reader)  
 
-    l = []
-    for row in reader:
-        l.append(row)
-    
-    return l
+    return [row for row in reader]
 
 def write_csv(data, dest_path):
     """
@@ -148,9 +140,9 @@ def create_dest_folder(dest_path, is_create_newly=False):
     """
     # 存在しない場合は作成
     if not os.path.exists(dest_path):
-        os.mkdir(dest_path)     # 保存先フォルダの作成
+        os.makedirs(dest_path, exist_ok=True)   # 保存先フォルダの作成
         
     # 既に存在する かつ 新規に作成する場合は削除してから作成
     if os.path.exists(dest_path) and is_create_newly:
         shutil.rmtree(dest_path)    # フォルダ削除
-        os.mkdir(dest_path)         # 保存先フォルダの作成
+        os.makedirs(dest_path, exist_ok=True)   # 保存先フォルダの作成

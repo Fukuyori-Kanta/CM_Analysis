@@ -1,22 +1,17 @@
 import cv2
 import os
 import ast
-from logging import getLogger, StreamHandler, DEBUG
-from file_io import create_dest_folder, read_csv
-from cut_segmentation_mod import read_video_data
+from utils.setting import setup_logger
+from utils.file_io import create_dest_folder, read_csv
+from utils.cut_segmentation_mod import read_video_data
 
 CUT_EXTENSION = '.mp4'          # 保存するカットの拡張子（MP4）
 CUT_IMG_EXTENSION = '.jpg'      # 保存するカット画像の拡張子（JPEG）
 
 # ログ設定
-logger = getLogger(__name__)
-handler = StreamHandler()
-handler.setLevel(DEBUG)
-logger.setLevel(DEBUG)
-logger.addHandler(handler)
-logger.propagate = False
+logger = setup_logger(__name__)
 
-def cut_img_save(video_id, cut_point, frames, dest_path):
+def save_cut_img(video_id, cut_point, frames, dest_path):
     """
     カット範囲から一番最後のフレームをカット画像として保存する
     
@@ -126,4 +121,4 @@ def cut_img_generate(video_path, cut_img_path, cut_point_path):
         # --------------------------------------------------
         # カット画像の保存
         # --------------------------------------------------
-        cut_img_save(video_id, cut_point, frames, dest_path)
+        save_cut_img(video_id, cut_point, frames, dest_path)

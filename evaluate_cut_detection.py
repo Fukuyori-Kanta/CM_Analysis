@@ -11,8 +11,8 @@ import seaborn as sns
 import os
 from logging import getLogger, StreamHandler, DEBUG
 
-from setting import set_path
-from file_io import read_csv, write_csv
+from setting import setup_path
+from utils.file_io import read_csv, write_csv
 from cut_segmentation_mod import read_video_data, cut_point_detect
 
 def str2int(string):
@@ -152,7 +152,7 @@ if __name__ == '__main__':
     os.chdir(r'C:\Users\hukuyori\CM_Analysis')  # TODO 後で消す
 
     # path の設定
-    path = set_path()   
+    path = setup_path()   
     root_path, video_path, cmData_path, result_cut_path, result_cut_img_path, ansData_path, result_cut_eva_path = path 
 
     # ログ設定

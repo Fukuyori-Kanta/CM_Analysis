@@ -2,8 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cv2
 import os
-from logging import getLogger, StreamHandler, DEBUG
-from file_io import write_csv, create_dest_folder
+from utils.setting import setup_logger
+from utils.file_io import write_csv, create_dest_folder
 
 # 閾値の設定
 CUT_THRESHOLD = 83          # カット分割時の閾値
@@ -14,12 +14,7 @@ EFFECT_THRESHOLD = 0.8      # エフェクト検出時のHIの類似度比較時
 EXTENSION = '.mp4'          # 保存するカットの拡張子（MP4）
 
 # ログ設定
-logger = getLogger(__name__)
-handler = StreamHandler()
-handler.setLevel(DEBUG)
-logger.setLevel(DEBUG)
-logger.addHandler(handler)
-logger.propagate = False
+logger = setup_logger(__name__)
 
 def MSE(diff): 
     """
@@ -40,16 +35,16 @@ def MSE(diff):
     """
     return np.mean(np.square(diff))
 
-def target_delete(cut_point, delete_target):
+def delete_incorrect_cut_point(cut_point, deletion_frame):
     """
-    カット点の修正時に、不要になったフレームを削除する関数
+    カット点として間違っているフレームを削除する関数
 
     Parameters
     ----------
     cut_point : list
         カット点のフレーム番号リスト
 
-    delete_target : list
+    deletion_frame : list
         不要なフレーム番号リスト
 
     Returns
@@ -57,15 +52,15 @@ def target_delete(cut_point, delete_target):
     cut_point : list
         カット点のフレーム番号リスト（削除後）
     """
-    delete_target = list(set(delete_target))    # 重複を排除
+    deletion_frame = list(set(deletion_frame))    # 重複を排除
 
     # 削除対象のカット点を削除
-    for i in delete_target:
+    for i in deletion_frame:
         cut_point.remove(i)    # 削除
     
     return cut_point
 
-def cut_between_frame_delete(cut_point, diff_images):
+def delete_cut_between_frame(cut_point, diff_images):
     """
     カット間フレームを削除する関数
     カット間フレーム = カットとカットに稀出来る不要なフレーム
@@ -95,13 +90,13 @@ def cut_between_frame_delete(cut_point, diff_images):
     diff_index = [i for i, diff in enumerate(diff) if diff == 1]    # 差異が1フレーム（連続なカット点）の添え字を取得
     remove_candidate = [cut_point[i+1] for i in diff_index]    # 削除候補
     
-    delete_target = []  # 削除対象
+    deletion_frame = []  # 削除対象
     for i in remove_candidate:
         # 差分画像同士のMSEが閾値以下のとき削除対象
         if MSE(diff_images[i-1] - diff_images[i]) <= CUT_BETWEEN_THRESHOLD:
-            delete_target.append(i)
+            deletion_frame.append(i)
 
-    cut_point = target_delete(cut_point, delete_target) # 削除対象の全フレームを削除
+    cut_point = delete_incorrect_cut_point(cut_point, deletion_frame) # 削除対象の全フレームを削除
     
     return cut_point
 
@@ -128,7 +123,7 @@ def create_mask_img(img):
 
     return mask
 
-def color_histogram_comp(img1, img2, THRESHOLD, need_mask=False):
+def compare_color_histogram(img1, img2, threshold, need_mask=False):
     """
     2つの画像から輝度ヒストグラムの類似度を算出する関数
     類似度が3つ以上閾値を超えたとき削除対象として比較結果を返す
@@ -141,7 +136,7 @@ def color_histogram_comp(img1, img2, THRESHOLD, need_mask=False):
     img2 : numpy.ndarray
         比較画像２の画像データ
     
-    THRESHOLD : float
+    threshold : float
         使用する閾値
 
     need_mask : bool, default False
@@ -188,13 +183,13 @@ def color_histogram_comp(img1, img2, THRESHOLD, need_mask=False):
 
     exceed_cnt = 0  # 閾値を超えた個数
 
-    if similarity_hist_r >= THRESHOLD:
+    if similarity_hist_r >= threshold:
         exceed_cnt += 1
-    if similarity_hist_g >= THRESHOLD:
+    if similarity_hist_g >= threshold:
         exceed_cnt += 1
-    if similarity_hist_b >= THRESHOLD:
+    if similarity_hist_b >= threshold:
         exceed_cnt += 1
-    if similarity_hist_k >= THRESHOLD:
+    if similarity_hist_k >= threshold:
         exceed_cnt += 1
 
     # 閾値を超える個数が3以上の時、削除対象とする
@@ -203,7 +198,7 @@ def color_histogram_comp(img1, img2, THRESHOLD, need_mask=False):
     else:
         return False
         
-def incorrect_cut_point_delete_by_color_histogram(cut_point, frames):
+def delete_incorrect_cut_point_by_color_histogram(cut_point, frames):
     """
     輝度ヒストグラム（カラーヒストグラム）による誤ったカット点の削除を行う関数
 
@@ -221,7 +216,7 @@ def incorrect_cut_point_delete_by_color_histogram(cut_point, frames):
 
         ヒストグラムインタセクション    D = Σ min(h[i] - h[i+1])    ※h はヒストグラム
         
-    具体的な処理のコードはサブ関数である[color_histogram_comp]に記載
+    具体的な処理のコードはサブ関数である[compare_color_histogram]に記載
 
     Parameters
     ----------
@@ -237,20 +232,20 @@ def incorrect_cut_point_delete_by_color_histogram(cut_point, frames):
         カット間フレームを削除した後のカット点
     """
     cut_frame = [frames[i] for i in cut_point]  # カット点の画像データ（フレーム）
-    delete_target = []  # 削除対象
+    deletion_frame = []  # 削除対象
 
     for i in range(len(cut_frame)-1):
-        isdelete = color_histogram_comp(cut_frame[i], cut_frame[i+1], HIST_THRESHOLD, need_mask=True)   # 2つの画像の比較結果（削除対象かどうか）
+        isdelete = compare_color_histogram(cut_frame[i], cut_frame[i+1], HIST_THRESHOLD, need_mask=True)   # 2つの画像の比較結果（削除対象かどうか）
 
         # 削除対象の時
         if isdelete:
-            delete_target.append(cut_point[i])
+            deletion_frame.append(cut_point[i])
 
-    cut_point = target_delete(cut_point, delete_target) # 削除対象の全フレームを削除
+    cut_point = delete_incorrect_cut_point(cut_point, deletion_frame) # 削除対象の全フレームを削除
     
     return cut_point
 
-def flash_frame_delete(cut_point, frames):
+def delete_flash_frame(cut_point, frames):
     """
     フラッシュを検出して、該当カット点を削除する関数
     [方法]
@@ -275,7 +270,7 @@ def flash_frame_delete(cut_point, frames):
     cut_point : list
         カット間フレームを削除した後のカット点
     """
-    delete_target = []  # 削除対象
+    deletion_frame = []  # 削除対象
     for i in range(len(cut_point)-1):
         # 次のカット点とのフレーム差が5フレーム以内の時
         if abs(cut_point[i] - cut_point[i+1]) <= 5: 
@@ -291,18 +286,18 @@ def flash_frame_delete(cut_point, frames):
             prev_frame = frames[cut_point[i]]        # 比較対象1
             next_frame = np.min(range_images, axis=0) # 比較対象2
 
-            isdelete = color_histogram_comp(prev_frame, next_frame, FLASH_THRESHOLD, need_mask=False)   # 2つの画像の比較結果（削除対象かどうか）
+            isdelete = compare_color_histogram(prev_frame, next_frame, FLASH_THRESHOLD, need_mask=False)   # 2つの画像の比較結果（削除対象かどうか）
 
             # 削除対象の時
             if isdelete:
-                delete_target.append(cut_point[i])
-                delete_target.append(cut_point[i+1])
+                deletion_frame.append(cut_point[i])
+                deletion_frame.append(cut_point[i+1])
 
-    cut_point = target_delete(cut_point, delete_target) # 削除対象の全フレームを削除
+    cut_point = delete_incorrect_cut_point(cut_point, deletion_frame) # 削除対象の全フレームを削除
     
     return cut_point
 
-def effect_frame_delete(cut_point, frames):
+def delete_effect_frame(cut_point, frames):
     """
     エフェクトを検出して、該当カット点を削除する関数
     [方法]
@@ -324,7 +319,7 @@ def effect_frame_delete(cut_point, frames):
     cut_point : list
         カット間フレームを削除した後のカット点
     """
-    delete_target = []
+    deletion_frame = []
     for i in range(len(cut_point)-1):
         if abs(cut_point[i] - cut_point[i+1]) <= 5: 
             for at in range(1, 6):  # 5フレーム分
@@ -336,15 +331,15 @@ def effect_frame_delete(cut_point, frames):
                 else:            
                     next_frame = frames[cut_point[i+1] + at]    # 比較対象2
 
-                isdelete = color_histogram_comp(prev_frame, next_frame, EFFECT_THRESHOLD, need_mask=False)   # 2つの画像の比較結果（削除対象かどうか）
+                isdelete = compare_color_histogram(prev_frame, next_frame, EFFECT_THRESHOLD, need_mask=False)   # 2つの画像の比較結果（削除対象かどうか）
 
                 # 削除対象の時
                 if isdelete:
-                    delete_target.append(cut_point[i])
-                    delete_target.append(cut_point[i+1])
+                    deletion_frame.append(cut_point[i])
+                    deletion_frame.append(cut_point[i+1])
 
-    delete_target = list(set(delete_target))    # 重複を削除
-    cut_point = target_delete(cut_point, delete_target) # 削除対象の全フレームを削除
+    deletion_frame = list(set(deletion_frame))    # 重複を削除
+    cut_point = delete_incorrect_cut_point(cut_point, deletion_frame) # 削除対象の全フレームを削除
                 
     return cut_point
 
@@ -403,7 +398,7 @@ def read_video_data(input_video_path):
 
     return frames, video_info
 
-def cut_point_detect(frames):
+def detect_cut_point(frames):
     """
     カット点を検出して、返す関数
     [手順]
@@ -450,22 +445,22 @@ def cut_point_detect(frames):
     # 4. 段階的なカット点の修正
     #--------------------------------------------------
     # 4-1 カット間フレーム（不要フレーム）を削除
-    cut_point = cut_between_frame_delete(cut_point, diff_images)
+    cut_point = delete_cut_between_frame(cut_point, diff_images)
 
     # 4-2 輝度ヒストグラムの類似度による誤ったカット点を削除
-    cut_point = incorrect_cut_point_delete_by_color_histogram(cut_point, frames) 
+    cut_point = delete_incorrect_cut_point_by_color_histogram(cut_point, frames) 
 
     # 4-3 フラッシュ検出による誤ったカット点を削除
-    cut_point = flash_frame_delete(cut_point, frames)
+    cut_point = delete_flash_frame(cut_point, frames)
 
     # 4-4 エフェクト検出による誤ったカット点を削除
-    cut_point = effect_frame_delete(cut_point, frames)
+    cut_point = delete_effect_frame(cut_point, frames)
     
     cut_point.append(len(frames) - 1) # 動画の最後のフレームインデックスを追加
 
     return cut_point
   
-def graph_save(data, dest_path):
+def save_diff_rate_graph(data, dest_path):
     """
     変化割合のグラフを保存する関数
 
@@ -536,7 +531,7 @@ def save_cut(video_id, cut_point, frames, video_info, dest_path):
     # diff_images = [aft - bef for bef, aft in zip(frames, frames[1:])]   # 差分画像
     # diff_rates = [MSE(d) for d in diff_images]  # 差分画像のMSEを変化割合とする
     # save_graph_path = os.path.normpath(os.path.join(dest_path, 'change_rate_graph.jpg'))
-    # graph_save(diff_rates, save_graph_path)
+    # save_diff_rate_graph(diff_rates, save_graph_path)
 
 def cut_segmentation(video_id_list, video_path, cut_path, cut_point_path):
     """
@@ -591,7 +586,7 @@ def cut_segmentation(video_id_list, video_path, cut_path, cut_point_path):
         # --------------------------------------------------
         # カット点の検出
         # --------------------------------------------------
-        cut_point = cut_point_detect(frames)
+        cut_point = detect_cut_point(frames)
         cut_point_list.append(cut_point)
         
         # --------------------------------------------------

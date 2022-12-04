@@ -6,7 +6,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from logging import getLogger, StreamHandler, DEBUG
 import cv2
 
-from file_io import read_csv, write_csv, create_dest_folder
+from utils.file_io import read_csv, write_csv, create_dest_folder
 from cut_segmentation_mod import read_video_data
 
 # ログ設定
@@ -102,9 +102,9 @@ def calc_scene_point(scene_data):
 # シーンを保存する
 def save_scene(scene_point_dic):
     base = os.path.dirname(os.path.abspath(__file__))   # スクリプト実行ディレクトリ
-    #result_scene_path = os.path.normpath(os.path.join(base, r'Result\Scene'))  # シーン保存ディレクトリ
-    result_scene_path = os.path.normpath(os.path.join(base, r'Result\Scene_1'))  # シーン保存ディレクトリ
-    video_path = os.path.normpath(os.path.join(base, r'Data\Movie'))    # 動画パス
+    #result_scene_path = os.path.normpath(os.path.join(base, r'result\Scene'))  # シーン保存ディレクトリ
+    result_scene_path = os.path.normpath(os.path.join(base, r'result\Scene_1'))  # シーン保存ディレクトリ
+    video_path = os.path.normpath(os.path.join(base, r'data\movie'))    # 動画パス
     
     # シーン保存先のフォルダを作成
     create_dest_folder(result_scene_path)
@@ -159,8 +159,8 @@ def save_scene(scene_point_dic):
 # シーンの統合
 def scene_integration():
     base = os.path.dirname(os.path.abspath(__file__))   # スクリプト実行ディレクトリ
-    cut_data_path = os.path.normpath(os.path.join(base, r'Result\Label\merged_label.csv'))  # カットデータのパス
-    scene_data_path = os.path.normpath(os.path.join(base, r'Result\Label\result_label.csv'))  # カットデータのパス
+    cut_data_path = os.path.normpath(os.path.join(base, r'result\Label\merged_label.csv'))  # カットデータのパス
+    scene_data_path = os.path.normpath(os.path.join(base, r'result\Label\result_label.csv'))  # カットデータのパス
     
     # カットデータの読み込み　
     # ['動画ID', 'カット番号', 'スタートフレーム', 'エンドフレーム', '[ラベルのリスト]']
