@@ -25,6 +25,35 @@ def getEncode(file_path):
                 continue
         return enc
 
+def read_txt(file_path, needs_skip_header=False):
+    """
+    テキストファイルを読み込んで、その結果を返す関数
+
+    Parameters
+    ----------
+    file_path : str
+        読み込むテキストファイルのパス
+
+    needs_skip_header : bool, default False
+        ヘッダーを読み飛ばすかどうか
+
+    Returns
+    -------
+    results: list
+        読み込んだ結果を返すリスト
+    """
+    # 文字コードを取得
+    enc = getEncode(file_path)
+    
+    with open(file_path, encoding=enc) as f:
+        # ヘッダーを読み飛ばしたい時
+        if needs_skip_header:
+            next(f)  
+
+        results = [s.strip() for s in f.readlines()]
+
+    return results
+
 def read_csv(file_path, needs_skip_header=False):
     """
     CSVファイルを読み込んで、その結果を返す関数

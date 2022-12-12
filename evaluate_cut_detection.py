@@ -297,4 +297,4 @@ if __name__ == '__main__':
     write_csv(result_cut_evaluates, result_cut_eva_path)
 
     logger.debug('全動画の評価が終了しました。')
-    logger.debug('--------------------------------------------------')
+    logger.debug('-' * 90)

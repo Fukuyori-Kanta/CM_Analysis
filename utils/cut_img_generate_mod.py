@@ -1,7 +1,7 @@
 import cv2
 import os
 import ast
-from utils.setting import setup_logger
+from utils.init_setting import setup_logger
 from utils.file_io import create_dest_folder, read_csv
 from utils.cut_segmentation_mod import read_video_data
 
@@ -62,7 +62,7 @@ def save_cut_img(video_id, cut_point, frames, dest_path):
 
     logger.debug(video_id + '_cut_img1 ～ ' + str(cut_count) + 'を保存しました')
     logger.debug('保存先 : ' + dest_path)
-    logger.debug('--------------------------------------------------')
+    logger.debug('-' * 90)
 
 def cut_img_generate(video_path, cut_img_path, cut_point_path):
     """

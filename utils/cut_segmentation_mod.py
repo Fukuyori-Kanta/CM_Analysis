@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cv2
 import os
-from utils.setting import setup_logger
+from utils.init_setting import setup_logger
 from utils.file_io import write_csv, create_dest_folder
 
 # 閾値の設定
@@ -523,7 +523,7 @@ def save_cut(video_id, cut_point, frames, video_info, dest_path):
 
     logger.debug(video_id + '_cut1 ～ ' + str(cut_count) + 'を保存しました')
     logger.debug('保存先 : ' + dest_path)
-    logger.debug('--------------------------------------------------')
+    logger.debug('-' * 90)
 
     # --------------------------------------------------
     # 変化割合グラフを保存
