@@ -1,5 +1,6 @@
 # 管理しないフォルダ，ファイル
 data
 result
+log
 settings.ini
 __pycache__

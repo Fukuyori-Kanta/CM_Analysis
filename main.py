@@ -8,9 +8,9 @@
 ・分析
 """
 import os
-import os.path
+import subprocess
 
-from utils.setting import setup_path, setup_logger
+from utils.init_setting import setup_path, setup_logger, get_env_data
 from utils.file_io import read_csv
 from utils.cut_segmentation_mod import cut_segmentation
 from utils.cut_img_generate_mod import cut_img_generate
@@ -34,7 +34,7 @@ if __name__ == '__main__':
         logger = setup_logger(__name__)
 
         # パス設定
-        root_path, video_path, cmData_top_path, cmData_btm_path, cut_path, cut_img_path, cut_point_path = setup_path() 
+        root_path, video_path, cmData_top_path, cmData_btm_path, cut_path, cut_img_path, cut_point_path, noun_label_path, verv_label_path, label_path = setup_path() 
 
         # ルートディレクトリではないとき作業ディレクトリを変更
         if os.getcwd() == root_path:
@@ -79,7 +79,7 @@ if __name__ == '__main__':
         logger.debug('CMデータを読み込みました。')
         logger.debug('入力元 : ' + cmData_top_path)
         logger.debug('入力元 : ' + cmData_btm_path)
-        logger.debug('--------------------------------------------------')
+        logger.debug('-' * 90)
 
         # --------------------------------------------------
         # カット分割
@@ -89,7 +89,7 @@ if __name__ == '__main__':
         cut_segmentation(video_id_list, video_path, cut_path, cut_point_path)   # カット分割
         
         logger.debug('全動画のカット分割が終了しました。')
-        logger.debug('--------------------------------------------------')
+        logger.debug('-' * 90)
         
         # --------------------------------------------------
         # カット画像の作成
@@ -99,12 +99,23 @@ if __name__ == '__main__':
         cut_img_generate(video_path, cut_img_path, cut_point_path)
 
         logger.debug('全カットのカット画像生成が終了しました。')
-        logger.debug('--------------------------------------------------')
-        """
+        logger.debug('-' * 90)
+        
         # --------------------------------------------------
-        # 物体認識によるラベル付け
+        # 物体検出によるラベル付け
         # --------------------------------------------------
+        logger.debug('物体検出によるラベル付けを開始します。')
+        
+        # 環境データの取得
+        object_detection_env, config_file, checkpoint_file, classes_file  = get_env_data("OBJECT_DET_ENV")
 
+        # 物体検出
+        subprocess.call(f'conda run -n {object_detection_env} python utils/object_detection_mod.py {config_file} {checkpoint_file} {classes_file} {cut_img_path} {noun_label_path}', shell=True)
+        
+        logger.debug('物体検出によるラベル付けが終了しました。')
+        logger.debug('-' * 90)
+
+        """
         # --------------------------------------------------
         # 動作認識によるラベル付け
         # --------------------------------------------------
@@ -117,7 +128,7 @@ if __name__ == '__main__':
         #label_shaping()
 
         logger.debug('ラベルデータの整形が終了しました。')
-        logger.debug('--------------------------------------------------')
+        logger.debug('-' * 90)
 
         # --------------------------------------------------
         # シーン統合
@@ -127,7 +138,7 @@ if __name__ == '__main__':
         #scene_integration()
 
         logger.debug('シーンの統合・保存が終了しました。')
-        logger.debug('--------------------------------------------------')
+        logger.debug('-' * 90)
 
         # --------------------------------------------------
         # 好感度とのマッチング・分析
@@ -137,7 +148,7 @@ if __name__ == '__main__':
         #favo_analysis()
 
         logger.debug('好感度とのマッチング・分析が終了しました。')
-        logger.debug('--------------------------------------------------')
+        logger.debug('-' * 90)
         """
     # 例外処理
     except ValueError as e:

@@ -154,7 +154,7 @@ def save_scene(scene_point_dic):
 
         logger.debug(video_id + '_scene1 ～ ' + str(scene_count) + 'を保存しました')
         logger.debug('保存先 : ' + dest_path)
-        logger.debug('--------------------------------------------------')
+        logger.debug('-' * 90)
 
 # シーンの統合
 def scene_integration():
