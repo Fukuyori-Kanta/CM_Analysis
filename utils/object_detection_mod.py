@@ -4,6 +4,7 @@ import glob
 import os
 import re
 import csv
+import operator
 from file_io import create_dest_folder, read_txt, write_csv
 from init_setting import setup_logger
 
@@ -116,7 +117,10 @@ if __name__ == '__main__':
     # 物体検出
     label_results = object_detection(args.config, args.checkpoints, args.classes, args.img_dir)
 
-    # 結果をCSVファイルに保存
+    # 結果をソート
+    label_results = sorted(label_results, key=operator.itemgetter('video_id', 'cut_no'))
+    
+    # CSVファイルに保存
     field_name = ['video_id', 'cut_no', 'labels']
     with open(args.results_path, 'w', encoding='utf-8', newline='') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames = field_name)

@@ -14,8 +14,8 @@ from utils.init_setting import setup_path, setup_logger, get_env_data
 from utils.file_io import read_csv
 from utils.cut_segmentation_mod import cut_segmentation
 from utils.cut_img_generate_mod import cut_img_generate
+from utils.label_shaping_mod import label_shaping
 
-# from label_shaping_mod import label_shaping
 # from scene_integration_mod import scene_integration
 # from analysis_mod import favo_analysis
 
@@ -34,7 +34,7 @@ if __name__ == '__main__':
         logger = setup_logger(__name__)
 
         # パス設定
-        root_path, video_path, cmData_top_path, cmData_btm_path, cut_path, cut_img_path, cut_point_path, noun_label_path, verv_label_path, label_path = setup_path() 
+        root_path, video_path, cmData_top_path, cmData_btm_path, cut_path, cut_img_path, cut_point_path, noun_label_path, verb_label_path, label_path = setup_path() 
 
         # ルートディレクトリではないとき作業ディレクトリを変更
         if os.getcwd() == root_path:
@@ -127,23 +127,22 @@ if __name__ == '__main__':
 
         # 動作認識
         cmd = f'conda run -n {action_recognition_env} python utils/action_recognition_mod.py '\
-            f'{config_file} {checkpoint_file} {classes_file} {cut_path} {verv_label_path}'
+            f'{config_file} {checkpoint_file} {classes_file} {cut_path} {verb_label_path}'
         subprocess.call(cmd, shell=True)
         
         logger.debug('動作認識によるラベル付けが終了しました。')
         logger.debug('-' * 90)
         
-        """
         # --------------------------------------------------
         # ラベルデータの整形（翻訳，スクリーニング，結合）
         # --------------------------------------------------      
         logger.debug('ラベルデータの整形を開始します。')
 
-        #label_shaping()
+        label_shaping(noun_label_path, verb_label_path, label_path)
 
         logger.debug('ラベルデータの整形が終了しました。')
         logger.debug('-' * 90)
-
+        """
         # --------------------------------------------------
         # シーン統合
         # --------------------------------------------------
