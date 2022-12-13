@@ -9,8 +9,7 @@ import logging
 INI_FILE = 'config/settings.ini'
 
 def read_config(ini_file):
-    """
-    iniファイルの読み込み結果を返す関数
+    """iniファイルの読み込み結果を返す関数
 
     iniファイル[settings.ini]は、以下のように設定すること
 
@@ -56,8 +55,7 @@ def read_config(ini_file):
     return config
 
 def setup_logger(mod_name):
-    """
-    設定ファイルからログ出力パスを取得してログ設定する関数
+    """設定ファイルからログ出力パスを取得してログ設定する関数
 
     Parameters
     ----------
@@ -107,8 +105,8 @@ def setup_logger(mod_name):
     return logger
 
 def setup_path():
-    """
-    設定ファイルからパスを取得して設定する関数
+    """設定ファイルからパスを取得して設定する関数
+
     各パスをリストにまとめて返す
 
     Returns
@@ -138,8 +136,7 @@ def setup_path():
     return [root_path, video_path, cmData_top_path, cmData_btm_path, cut_path, cut_img_path, cut_point_path, noun_label_path, verv_label_path, label_path]
 
 def get_env_data(env_name):
-    """
-    設定ファイルから環境設定データを取得する関数
+    """設定ファイルから環境設定データを取得する関数
 
     Parameters
     ----------

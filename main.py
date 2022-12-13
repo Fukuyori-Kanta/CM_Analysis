@@ -107,7 +107,7 @@ if __name__ == '__main__':
         logger.debug('物体検出によるラベル付けを開始します。')
         
         # 環境データの取得
-        object_detection_env, config_file, checkpoint_file, classes_file  = get_env_data("OBJECT_DET_ENV")
+        object_detection_env, config_file, checkpoint_file, classes_file  = get_env_data('OBJECT_DET_ENV')
 
         # 物体検出
         cmd = f'conda run -n {object_detection_env} python utils/object_detection_mod.py '\
@@ -169,7 +169,7 @@ if __name__ == '__main__':
         print(e)
     except:
         import sys
-        print("Error: ", sys.exc_info()[0])
+        print('Error: ', sys.exc_info()[0])
         print(sys.exc_info()[1])
         import traceback
         print(traceback.format_tb(sys.exc_info[2]))

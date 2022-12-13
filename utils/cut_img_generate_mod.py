@@ -12,8 +12,7 @@ CUT_IMG_EXTENSION = '.jpg'      # 保存するカット画像の拡張子（JPEG
 logger = setup_logger(__name__)
 
 def save_cut_img(video_id, cut_point, frames, dest_path):
-    """
-    カット範囲から一番最後のフレームをカット画像として保存する
+    """カット範囲から一番最後のフレームをカット画像として保存する
     
     一番最後のフレームの理由は、カット画像の調査（※）により、
     画像のブレが比較的少ないという結果を得たからである。
@@ -65,17 +64,15 @@ def save_cut_img(video_id, cut_point, frames, dest_path):
     logger.debug('-' * 90)
 
 def cut_img_generate(video_path, cut_img_path, cut_point_path):
-    """
-    各カットからカット画像を作成する関数
+    """各カットからカット画像を作成する関数
+
     カット画像 ・・・ 物体認識に使用する画像
     
-    以下の流れで行う
-    
-    カット画像の作成
-        保存先フォルダの作成
-        カット点データの読み込み 
-        動画の読み込み、フレームデータ，動画情報の抽出
-        カット画像の保存
+    [手順]
+        1. 保存先フォルダの作成
+        2. カット点データの読み込み 
+        3. 動画の読み込み、フレームデータ，動画情報の抽出
+        4. カット画像の保存
 
     Parameters
     ----------
