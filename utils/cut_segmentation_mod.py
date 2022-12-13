@@ -17,8 +17,7 @@ EXTENSION = '.mp4'          # 保存するカットの拡張子（MP4）
 logger = setup_logger(__name__)
 
 def MSE(diff): 
-    """
-    平均二乗誤差(MSE)を行って、結果を帰す関数
+    """平均二乗誤差(MSE)を行って、結果を帰す関数
 
     diff = y[i+1] - y[i]    （差分画像）
     MSE = 1/n Σ (diff)^2    （平均二乗誤差）
@@ -36,8 +35,7 @@ def MSE(diff):
     return np.mean(np.square(diff))
 
 def delete_incorrect_cut_point(cut_point, deletion_frame):
-    """
-    カット点として間違っているフレームを削除する関数
+    """カット点として間違っているフレームを削除する関数
 
     Parameters
     ----------
@@ -61,8 +59,8 @@ def delete_incorrect_cut_point(cut_point, deletion_frame):
     return cut_point
 
 def delete_cut_between_frame(cut_point, diff_images):
-    """
-    カット間フレームを削除する関数
+    """カット間フレームを削除する関数
+
     カット間フレーム = カットとカットに稀出来る不要なフレーム
 
     [削除の理由]
@@ -101,8 +99,8 @@ def delete_cut_between_frame(cut_point, diff_images):
     return cut_point
 
 def create_mask_img(img):
-    """
-    マスク画像を作成する関数
+    """マスク画像を作成する関数
+
     輝度ヒストグラムを求める際に使用
 
     Parameters
@@ -124,8 +122,8 @@ def create_mask_img(img):
     return mask
 
 def compare_color_histogram(img1, img2, threshold, need_mask=False):
-    """
-    2つの画像から輝度ヒストグラムの類似度を算出する関数
+    """2つの画像から輝度ヒストグラムの類似度を算出する関数
+
     類似度が3つ以上閾値を超えたとき削除対象として比較結果を返す
 
     Parameters
@@ -199,8 +197,7 @@ def compare_color_histogram(img1, img2, threshold, need_mask=False):
         return False
         
 def delete_incorrect_cut_point_by_color_histogram(cut_point, frames):
-    """
-    輝度ヒストグラム（カラーヒストグラム）による誤ったカット点の削除を行う関数
+    """輝度ヒストグラム（カラーヒストグラム）による誤ったカット点の削除を行う関数
 
     [削除の理由]
         動きの激しい時に大量かつ連続でカット点を取ってしまう問題が生じているため
@@ -246,8 +243,8 @@ def delete_incorrect_cut_point_by_color_histogram(cut_point, frames):
     return cut_point
 
 def delete_flash_frame(cut_point, frames):
-    """
-    フラッシュを検出して、該当カット点を削除する関数
+    """フラッシュを検出して、該当カット点を削除する関数
+
     [方法]
         次のカット点とのフレーム差が5フレーム以内のカット点のみ検査する
         次のカット点を含めて幅3フレーム分の画像を取得する
@@ -298,8 +295,8 @@ def delete_flash_frame(cut_point, frames):
     return cut_point
 
 def delete_effect_frame(cut_point, frames):
-    """
-    エフェクトを検出して、該当カット点を削除する関数
+    """エフェクトを検出して、該当カット点を削除する関数
+
     [方法]
         次のカット点とのフレーム差が5フレーム以内のカット点のみ検査する
         次のカット点から幅5フレーム分の画像を取得する
@@ -344,8 +341,7 @@ def delete_effect_frame(cut_point, frames):
     return cut_point
 
 def read_video_data(input_video_path):
-    """
-    動画を読み込み、フレームデータと動画情報を抽出する関数
+    """動画を読み込み、フレームデータと動画情報を抽出する関数
 
     Parameters
     ----------
@@ -399,8 +395,8 @@ def read_video_data(input_video_path):
     return frames, video_info
 
 def detect_cut_point(frames):
-    """
-    カット点を検出して、返す関数
+    """カット点を検出して、返す関数
+
     [手順]
     1. 隣接フレーム間で差分画像を作成
     2. 変化割合を算出
@@ -461,8 +457,7 @@ def detect_cut_point(frames):
     return cut_point
   
 def save_diff_rate_graph(data, dest_path):
-    """
-    変化割合のグラフを保存する関数
+    """変化割合のグラフを保存する関数
 
     Parameters
     ----------
@@ -481,8 +476,7 @@ def save_diff_rate_graph(data, dest_path):
     plt.savefig(dest_path)                      # 保存
 
 def save_cut(video_id, cut_point, frames, video_info, dest_path):
-    """
-    動画を分割して保存する関数
+    """動画を分割して保存する関数
 
     Parameters
     ----------
@@ -534,16 +528,13 @@ def save_cut(video_id, cut_point, frames, video_info, dest_path):
     # save_diff_rate_graph(diff_rates, save_graph_path)
 
 def cut_segmentation(video_id_list, video_path, cut_path, cut_point_path):
-    """
-    カット分割を行い、各カットをフォルダに保存する関数
+    """カット分割を行い、各カットをフォルダに保存する関数
     
-    以下の流れで行う
-    
-    カット分割
-        保存先フォルダの作成 
-        動画の読み込み、フレームデータ，動画情報の抽出
-        カット点の検出
-        カットの保存
+    [手順]
+        1. 保存先フォルダの作成 
+        2. 動画の読み込み、フレームデータ，動画情報の抽出
+        3. カット点の検出
+        4. カットの保存
 
     Parameters
     ----------
