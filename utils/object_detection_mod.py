@@ -48,7 +48,7 @@ def object_detection(config_file, checkpoint_file, classes_file, img_dir):
 def parse_args():
     parser = argparse.ArgumentParser(
         description='物体検出実行に必要なパスを設定')
-    parser.add_argument('config', help='configファイルのパス')
+    parser.add_argument('config', help='Configファイルのパス')
     parser.add_argument('checkpoints', help='checkpointファイルのパス')
     parser.add_argument('classes', help='認識クラス一覧ファイル(.txt)のパス')
     parser.add_argument('img_dir', help='画像フォルダのパス')

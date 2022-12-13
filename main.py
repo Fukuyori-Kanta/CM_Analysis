@@ -110,16 +110,30 @@ if __name__ == '__main__':
         object_detection_env, config_file, checkpoint_file, classes_file  = get_env_data("OBJECT_DET_ENV")
 
         # 物体検出
-        subprocess.call(f'conda run -n {object_detection_env} python utils/object_detection_mod.py {config_file} {checkpoint_file} {classes_file} {cut_img_path} {noun_label_path}', shell=True)
+        cmd = f'conda run -n {object_detection_env} python utils/object_detection_mod.py '\
+            f'{config_file} {checkpoint_file} {classes_file} {cut_img_path} {noun_label_path}'
+        subprocess.call(cmd, shell=True)
         
         logger.debug('物体検出によるラベル付けが終了しました。')
         logger.debug('-' * 90)
 
-        """
         # --------------------------------------------------
         # 動作認識によるラベル付け
         # --------------------------------------------------
+        logger.debug('動作認識によるラベル付けを開始します。')
         
+        # 環境データの取得
+        action_recognition_env, config_file, checkpoint_file, classes_file  = get_env_data("ACTION_REC_ENV")
+
+        # 動作認識
+        cmd = f'conda run -n {action_recognition_env} python utils/action_recognition_mod.py '\
+            f'{config_file} {checkpoint_file} {classes_file} {cut_path} {verv_label_path}'
+        subprocess.call(cmd, shell=True)
+        
+        logger.debug('動作認識によるラベル付けが終了しました。')
+        logger.debug('-' * 90)
+        
+        """
         # --------------------------------------------------
         # ラベルデータの整形（翻訳，スクリーニング，結合）
         # --------------------------------------------------      

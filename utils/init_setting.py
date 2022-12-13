@@ -161,16 +161,21 @@ def get_env_data(env_name):
     # --------------------------------------------------
     # 物体検出用の環境
     if env_name == 'OBJECT_DET_ENV':
-        object_detection_env = config[env_name]['object_detection_env'] # conda環境名
-        config_file_path = config[env_name]['config_file_path']         # configファイルのパス
-        checkpoint_file_path = config[env_name]['checkpoint_file_path']   # modelデータのパス
-        classes_file_path = config[env_name]['classes_file_path']         # 認識クラス一覧のファイルパス
+        object_detection_env = config[env_name]['object_detection_env']     # conda環境名
+        config_file_path = config[env_name]['config_file_path']             # configファイルのパス
+        checkpoint_file_path = config[env_name]['checkpoint_file_path']     # modelデータのパス
+        classes_file_path = config[env_name]['classes_file_path']           # 認識クラス一覧のファイルパス
 
         return [object_detection_env, config_file_path, checkpoint_file_path, classes_file_path]
     
     # 動作認識用の環境
-    elif env_name == 'ACTION_RCG_ENV':
-        pass
+    elif env_name == 'ACTION_REC_ENV':
+        action_recognition_env = config[env_name]['action_recognition_env'] # conda環境名
+        config_file_path = config[env_name]['config_file_path']             # configファイルのパス
+        checkpoint_file_path = config[env_name]['checkpoint_file_path']     # modelデータのパス
+        classes_file_path = config[env_name]['classes_file_path']           # 認識クラス一覧のファイルパス
+
+        return [action_recognition_env, config_file_path, checkpoint_file_path, classes_file_path]
     
     # エラー処理
     else:
