@@ -130,10 +130,10 @@ def setup_path():
     cut_img_path = os.path.join(root_path, config['PATH']['cut_img_path'])          # カット画像作成結果の保存フォルダパス
     cut_point_path = os.path.join(root_path, config['PATH']['cut_point_path'])      # カット点データ（.csv）の保存ファイルパス
     noun_label_path = os.path.join(root_path, config['PATH']['noun_label_path'])    # ラベル付け結果（物体検出）の保存ファイルパス
-    verv_label_path = os.path.join(root_path, config['PATH']['verv_label_path'])    # ラベル付け結果（動作認識）の保存ファイルパス
+    verb_label_path = os.path.join(root_path, config['PATH']['verb_label_path'])    # ラベル付け結果（動作認識）の保存ファイルパス
     label_path = os.path.join(root_path, config['PATH']['label_path'])              # ラベル付け結果の保存ファイルパス
 
-    return [root_path, video_path, cmData_top_path, cmData_btm_path, cut_path, cut_img_path, cut_point_path, noun_label_path, verv_label_path, label_path]
+    return [root_path, video_path, cmData_top_path, cmData_btm_path, cut_path, cut_img_path, cut_point_path, noun_label_path, verb_label_path, label_path]
 
 def get_env_data(env_name):
     """設定ファイルから環境設定データを取得する関数

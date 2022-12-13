@@ -1,15 +1,9 @@
-import json
+﻿import json
 import os 
 import ast
-
-from utils.file_io import read_csv, write_csv
-
-# テキストファイルの読み込み
-def read_txt(path):
-    with open(path, encoding='utf-8') as f:
-        l = [s.strip() for s in f.readlines()]
-
-    return l
+import csv
+import operator
+from utils.file_io import read_txt, read_csv, write_csv
 
 # ラベルの翻訳辞書作成
 def trans_dic_creation(label_list_en, label_list_ja):
@@ -107,69 +101,22 @@ def verb_label_shaping():
         verb_label.append(l)
 
     return verb_label
-
-# 動詞ラベルと名詞ラベルの結合
-def noun_verb_merge(noun_label, verb_label):
     
-    # 名詞ラベルをベースに、動作ラベルが付与されているならば、両ラベルを結合
-    for noun in noun_label:
-        for verb in verb_label:
-            # 動画IDとカット番号が一致するときに結合
-            if noun[0] == verb[0] and noun[1] == verb[1]:
-                noun[2] += verb[2]  # 動詞ラベルと名詞ラベルを結合して格納
-            
-    return noun_label
+def label_shaping(noun_label_path, verb_label_path, label_path):
+    noun_label = [[data[0], data[1], ast.literal_eval(data[2])] for data in read_csv(noun_label_path, needs_skip_header=True)]
+    verb_label = [[data[0], data[1], ast.literal_eval(data[2])] for data in read_csv(verb_label_path, needs_skip_header=True)]
 
-#カット範囲の追加
-def cut_range_add(label, cut_point_list):
+    if len(noun_label) != len(verb_label):
+        raise ValueError('物体検出と動作認識のレコード数が異なっています。')
+
+    result_label = [{'video_id': noun[0], 'cut_no': int(noun[1]), 'labels': noun[2] + verb[2]} for noun, verb in zip(noun_label, verb_label)]
+
+    # 結果をソート
+    label_results = sorted(label_results, key=operator.itemgetter('video_id', 'cut_no'))
     
-    cut_point_list = [ast.literal_eval(cut_point) for cut_point in cut_point_list[1]]
-    cut_range_list = [] # カット範囲のリスト
-    
-    for cut_point in cut_point_list:
-        begin = 0   # カット最初のフレーム
-        cut_count = len(cut_point) # カット数
-
-        for i in range(cut_count):
-            cut_range_list.append(tuple([begin, cut_point[i]]))
-            begin = int(cut_point[i])+1
-
-    label_data = [] # ラベルデータ
-
-    # 見出しの追加
-    label_data.append(['動画ID', 'カット番号', 'スタートフレーム', 'エンドフレーム', '[ラベルのリスト]'])   
-
-    # データの追加
-    for l, cut_range in zip(label, cut_range_list):
-        l.insert(2, cut_range[0])
-        l.insert(3, cut_range[1])
-        label_data.append(l)
-
-    return label_data
-
-def label_shaping():
-    """
-    ['動画ID', 'カット番号', 'スタートフレーム', 'エンドフレーム', '[ラベルのリスト]']
-
-    """
-    base_path = os.path.dirname(os.path.abspath(__file__))  # スクリプト実行ディレクトリ
-    cut_point_path = os.path.normpath(os.path.join(base_path, r'result\cut_point.csv'))   # カット点データ
-    merged_label_path = os.path.normpath(os.path.join(base_path, r'result\Label\merged_label.csv'))   # 結合ラベルデータ格納パス
-    
-    # 名詞ラベルの整理
-    noun_label = noun_label_shaping()
-
-    # 動詞ラベルの整理
-    verb_label = verb_label_shaping()
-
-    # 名詞ラベルと動詞ラベルの結合
-    label = noun_verb_merge(noun_label, verb_label)
-    
-    # カット点のリストを読み込み
-    cut_point_list = read_csv(cut_point_path)
-    label = cut_range_add(label, cut_point_list)   # カット範囲情報を追加
-
-    # CSVファイルに書き出し
-    write_csv(label, merged_label_path)
-    
-label_shaping()
+    # CSVファイルに保存
+    field_name = ['video_id', 'cut_no', 'labels']
+    with open(label_path, 'w', encoding='utf-8', newline='') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames = field_name)
+        writer.writeheader()
+        writer.writerows(result_label)
