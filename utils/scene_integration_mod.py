@@ -61,15 +61,16 @@ def intersect_list(lst1, lst2):
     return arr
 
 # ラベル同士の比較、類似度の算出
-def label_comp(prev_id, next_video_id, prev_label, next_label):
+def label_comp(prev_id, next_id, prev_label, next_label):
     # 両方のラベルデータが存在するとき
     if prev_label and next_label:  
         # 両ラベルの類似度算出
         docs = [' '.join(prev_label), ' '.join(next_label)] # 2つの文書にする
         cs_array = np.round(cosine_similarity(vecs_array(docs), vecs_array(docs)),3)    # 2つの文書から類似行列を算出
         similarity = cs_array[0][1] # 類似行列から類似度を抽出
+
         # 類似度が閾値以上の時
-        if similarity >= 0.93 and prev_id == next_video_id:
+        if similarity >= 0.93 and prev_id == next_id:
             return True
         else:
             return False
@@ -99,14 +100,9 @@ def calc_scene_point(scene_data):
     return scene_point_dic   
 
 # シーンを保存する
-def save_scene(scene_point_dic):
-    base = os.path.dirname(os.path.abspath(__file__))   # スクリプト実行ディレクトリ
-    #result_scene_path = os.path.normpath(os.path.join(base, r'result\Scene'))  # シーン保存ディレクトリ
-    result_scene_path = os.path.normpath(os.path.join(base, r'result\scene_1'))  # シーン保存ディレクトリ
-    video_path = os.path.normpath(os.path.join(base, r'data\movie'))    # 動画パス
-    
+def save_scene(scene_point_dic, video_path, scene_path):
     # シーン保存先のフォルダを作成
-    create_dest_folder(result_scene_path)
+    create_dest_folder(scene_path)
 
     # --------------------------------------------------
     # 動画IDリストの作成
@@ -124,7 +120,7 @@ def save_scene(scene_point_dic):
         # --------------------------------------------------
         # 保存先フォルダの作成
         # --------------------------------------------------
-        dest_path = os.path.join(result_scene_path, video_id) # 各動画のカット分割結果の保存先
+        dest_path = os.path.join(scene_path, video_id) # 各動画のカット分割結果の保存先
         create_dest_folder(dest_path)   # フォルダ作成 
         
         # --------------------------------------------------
@@ -156,12 +152,11 @@ def save_scene(scene_point_dic):
         logger.debug('-' * 90)
 
 # シーンの統合
-def scene_integration():
-    base = os.path.dirname(os.path.abspath(__file__))   # スクリプト実行ディレクトリ
-    label_path = os.path.normpath(os.path.join(base, r'result\label\label.csv'))    
-    cut_point_path = os.path.normpath(os.path.join(base, r'result\cut_point.csv')) 
-
-    # ラベルデータ
+def scene_integration(cut_point_path, label_path, video_path, scene_path, scene_data_path):
+    # カット点データの読み込み
+    video_id, cut_point = read_csv(cut_point_path)    # カットデータ 
+    cut_point = [ast.literal_eval(data) for data in cut_point]
+    
     labels = [[data[0], int(data[1]), ast.literal_eval(data[2])] for data in read_csv(label_path, needs_skip_header=True)]
     
     # カット点データの読み込み
@@ -215,6 +210,7 @@ def scene_integration():
     # 最後のデータ追加
     scene_data.append(cut_data[-1])
     
+    # 統合による削除対象
     remove_target = [n for p, n in zip(scene_data, scene_data[1:]) if p[0] == n[0] and int(p[3]) >= int(n[2])]
     for rt in remove_target:
         scene_data.remove(rt)
@@ -240,13 +236,9 @@ def scene_integration():
     scene_point_dic = calc_scene_point(scene_data)
 
     # シーンを動画として新たに保存
-    #save_scene(scene_point_dic)
+    #save_scene(scene_point_dic, video_path, scene_path)
 
     # 見出しを追加して、シーンデータをCSVファイルに保存
-    scene_data.insert(0, ['動画ID', 'シーン番号', 'スタートフレーム', 'エンドフレーム', '[ラベルのリスト]'])
-    
-    write_csv(scene_data, r'result\scene_data.csv')
-
-if __name__ == '__main__':
-    scene_integration()
-    # print(label_comp('L201079479', 'L201079479', ['Woman', 'Girl', 'Dress'], ['Woman', 'Girl', 'Dress']))
+    field_name = ['動画ID', 'シーン番号', 'スタートフレーム', 'エンドフレーム', '[ラベルのリスト]']
+    scene_data.insert(0, field_name)
+    write_csv(scene_data, scene_data_path)
