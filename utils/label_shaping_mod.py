@@ -102,14 +102,15 @@ def verb_label_shaping():
 
     return verb_label
     
-def label_shaping(noun_label_path, verb_label_path, label_path):
-    noun_label = [[data[0], data[1], ast.literal_eval(data[2])] for data in read_csv(noun_label_path, needs_skip_header=True)]
-    verb_label = [[data[0], data[1], ast.literal_eval(data[2])] for data in read_csv(verb_label_path, needs_skip_header=True)]
+def label_shaping(noun_label_path, verb_label_path, label_path): 
+    noun_label = [[data[0], data[1], ast.literal_eval(data[2])] for data in read_csv(noun_label_path, needs_skip_header=True)]  # 物体ラベル
+    verb_label = [[data[0], data[1], ast.literal_eval(data[2])] for data in read_csv(verb_label_path, needs_skip_header=True)]  # 動作ラベル
 
     if len(noun_label) != len(verb_label):
         raise ValueError('物体検出と動作認識のレコード数が異なっています。')
 
-    result_label = [{'video_id': noun[0], 'cut_no': int(noun[1]), 'labels': noun[2] + verb[2]} for noun, verb in zip(noun_label, verb_label)]
+    # 物体ラベルと動作ラベルを結合
+    result_label = [{'video_id': noun[0], 'cut_no': int(noun[1]), 'labels': noun[2] + verb[2]} for noun, verb in zip(noun_label, verb_label)]   # ラベル結果
 
     # 結果をソート
     label_results = sorted(label_results, key=operator.itemgetter('video_id', 'cut_no'))
