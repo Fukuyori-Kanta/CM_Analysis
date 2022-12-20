@@ -398,14 +398,14 @@ def detect_cut_point(frames):
     """カット点を検出して、返す関数
 
     [手順]
-    1. 隣接フレーム間で差分画像を作成
-    2. 変化割合を算出
-    3. 変化割合が閾値以上の時、カット点として抽出
-    4. 段階的なカット点の修正
-        4-1 カット間フレーム（不要フレーム）を削除
-        4-2 輝度ヒストグラムで誤ったカット点を削除
-        4-3 フラッシュ検出による誤ったカット点を削除
-        4-4 エフェクト検出による誤ったカット点を削除
+        1. 隣接フレーム間で差分画像を作成
+        2. 変化割合を算出
+        3. 変化割合が閾値以上の時、カット点として抽出
+        4. 段階的なカット点の修正
+            4-1 カット間フレーム（不要フレーム）を削除
+            4-2 輝度ヒストグラムで誤ったカット点を削除
+            4-3 フラッシュ検出による誤ったカット点を削除
+            4-4 エフェクト検出による誤ったカット点を削除
 
     Parameters
     ----------
@@ -509,7 +509,7 @@ def save_cut(video_id, cut_point, frames, video_info, dest_path):
 
     cut_count = len(cut_point) # カット数
     for i in range(cut_count):
-        save_cut_path = os.path.normpath(os.path.join(dest_path, 'cut' + str(i+1) + '.mp4'))    # 保存先
+        save_cut_path = os.path.normpath(os.path.join(dest_path, 'cut' + str(i+1) + EXTENSION))    # 保存先
         writer.append(cv2.VideoWriter(save_cut_path, fourcc, fps, (int(width), int(height))))
         for j in range(begin, cut_point[i]+1):
             writer[i].write(frames[j])

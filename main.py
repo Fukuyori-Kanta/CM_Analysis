@@ -63,85 +63,85 @@ if __name__ == '__main__':
          'CM好感度sec14', 'CM好感度sec15', 'CM好感度sec16', 'CM好感度sec17', 'CM好感度sec18', 'CM好感度sec19', 'CM好感度sec20', 'CM好感度sec21', 
          'CM好感度sec22', 'CM好感度sec23', 'CM好感度sec24', 'CM好感度sec25', 'CM好感度sec26', 'CM好感度sec27', 'CM好感度sec28', 'CM好感度sec29', 'CM好感度sec30']
         """
-        # # 上位データ
-        # header, *data_row = read_csv(cmData_top_path)
-        # cm_data_top = [dict(zip(header, item)) for item in data_row]    # 辞書型のリストに整形
+        # 上位データ
+        header, *data_row = read_csv(cmData_top_path)
+        cm_data_top = [dict(zip(header, item)) for item in data_row]    # 辞書型のリストに整形
         
-        # # 下位データ
-        # header, *data_row = read_csv(cmData_btm_path)
-        # cm_data_btm = [dict(zip(header, item)) for item in data_row]
+        # 下位データ
+        header, *data_row = read_csv(cmData_btm_path)
+        cm_data_btm = [dict(zip(header, item)) for item in data_row]
         
-        # # 動画IDリストを作成
-        # video_id_list_top = [cm_data_top[i]['映像コード'] for i in range(len(cm_data_top))]  # 上位       
-        # video_id_list_btm = [cm_data_btm[i]['映像コード'] for i in range(len(cm_data_btm))]  # 下位
-        # video_id_list = video_id_list_top + video_id_list_btm                               # 全て
+        # 動画IDリストを作成
+        video_id_list_top = [cm_data_top[i]['映像コード'] for i in range(len(cm_data_top))]  # 上位       
+        video_id_list_btm = [cm_data_btm[i]['映像コード'] for i in range(len(cm_data_btm))]  # 下位
+        video_id_list = video_id_list_top + video_id_list_btm                               # 全て
 
-        # logger.debug('CMデータを読み込みました。')
-        # logger.debug('入力元 : ' + cmData_top_path)
-        # logger.debug('入力元 : ' + cmData_btm_path)
-        # logger.debug('-' * 90)
+        logger.debug('CMデータを読み込みました。')
+        logger.debug('入力元 : ' + cmData_top_path)
+        logger.debug('入力元 : ' + cmData_btm_path)
+        logger.debug('-' * 90)
 
-        # # --------------------------------------------------
-        # # カット分割
-        # # --------------------------------------------------
-        # logger.debug('カット分割を開始します。')
+        # --------------------------------------------------
+        # カット分割
+        # --------------------------------------------------
+        logger.debug('カット分割を開始します。')
 
-        # cut_segmentation(video_id_list, video_path, cut_path, cut_point_path)   # カット分割
+        cut_segmentation(video_id_list, video_path, cut_path, cut_point_path)   # カット分割
         
-        # logger.debug('全動画のカット分割が終了しました。')
-        # logger.debug('-' * 90)
+        logger.debug('全動画のカット分割が終了しました。')
+        logger.debug('-' * 90)
         
-        # # --------------------------------------------------
-        # # カット画像の作成
-        # # --------------------------------------------------
-        # logger.debug('カット画像生成を開始します。')
+        # --------------------------------------------------
+        # カット画像の作成
+        # --------------------------------------------------
+        logger.debug('カット画像生成を開始します。')
 
-        # cut_img_generate(video_path, cut_img_path, cut_point_path)
+        cut_img_generate(video_path, cut_img_path, cut_point_path)
 
-        # logger.debug('全カットのカット画像生成が終了しました。')
-        # logger.debug('-' * 90)
+        logger.debug('全カットのカット画像生成が終了しました。')
+        logger.debug('-' * 90)
         
-        # # --------------------------------------------------
-        # # 物体検出によるラベル付け
-        # # --------------------------------------------------
-        # logger.debug('物体検出によるラベル付けを開始します。')
+        # --------------------------------------------------
+        # 物体検出によるラベル付け
+        # --------------------------------------------------
+        logger.debug('物体検出によるラベル付けを開始します。')
         
-        # # 環境データの取得
-        # object_detection_env, config_file, checkpoint_file, classes_file  = get_env_data('OBJECT_DET_ENV')
+        # 環境データの取得
+        object_detection_env, config_file, checkpoint_file, classes_file  = get_env_data('OBJECT_DET_ENV')
 
-        # # 物体検出
-        # cmd = f'conda run -n {object_detection_env} python utils/object_detection_mod.py '\
-        #     f'{config_file} {checkpoint_file} {classes_file} {cut_img_path} {noun_label_path}'
-        # subprocess.call(cmd, shell=True)
+        # 物体検出
+        cmd = f'conda run -n {object_detection_env} python utils/object_detection_mod.py '\
+            f'{config_file} {checkpoint_file} {classes_file} {cut_img_path} {noun_label_path}'
+        subprocess.call(cmd, shell=True)
         
-        # logger.debug('物体検出によるラベル付けが終了しました。')
-        # logger.debug('-' * 90)
+        logger.debug('物体検出によるラベル付けが終了しました。')
+        logger.debug('-' * 90)
 
-        # # --------------------------------------------------
-        # # 動作認識によるラベル付け
-        # # --------------------------------------------------
-        # logger.debug('動作認識によるラベル付けを開始します。')
+        # --------------------------------------------------
+        # 動作認識によるラベル付け
+        # --------------------------------------------------
+        logger.debug('動作認識によるラベル付けを開始します。')
         
-        # # 環境データの取得
-        # action_recognition_env, config_file, checkpoint_file, classes_file  = get_env_data("ACTION_REC_ENV")
+        # 環境データの取得
+        action_recognition_env, config_file, checkpoint_file, classes_file  = get_env_data("ACTION_REC_ENV")
 
-        # # 動作認識
-        # cmd = f'conda run -n {action_recognition_env} python utils/action_recognition_mod.py '\
-        #     f'{config_file} {checkpoint_file} {classes_file} {cut_path} {verb_label_path}'
-        # subprocess.call(cmd, shell=True)
+        # 動作認識
+        cmd = f'conda run -n {action_recognition_env} python utils/action_recognition_mod.py '\
+            f'{config_file} {checkpoint_file} {classes_file} {cut_path} {verb_label_path}'
+        subprocess.call(cmd, shell=True)
         
-        # logger.debug('動作認識によるラベル付けが終了しました。')
-        # logger.debug('-' * 90)
+        logger.debug('動作認識によるラベル付けが終了しました。')
+        logger.debug('-' * 90)
         
-        # # --------------------------------------------------
-        # # ラベルデータの整形（翻訳，スクリーニング，結合）
-        # # --------------------------------------------------      
-        # logger.debug('ラベルデータの整形を開始します。')
+        # --------------------------------------------------
+        # ラベルデータの整形（翻訳，スクリーニング，結合）
+        # --------------------------------------------------      
+        logger.debug('ラベルデータの整形を開始します。')
 
-        # label_shaping(noun_label_path, verb_label_path, label_path)
+        label_shaping(noun_label_path, verb_label_path, label_path)
 
-        # logger.debug('ラベルデータの整形が終了しました。')
-        # logger.debug('-' * 90)
+        logger.debug('ラベルデータの整形が終了しました。')
+        logger.debug('-' * 90)
         
         # --------------------------------------------------
         # シーン統合
@@ -152,6 +152,7 @@ if __name__ == '__main__':
 
         logger.debug('シーンの統合・保存が終了しました。')
         logger.debug('-' * 90)
+
         """
         # --------------------------------------------------
         # 好感度とのマッチング・分析
@@ -172,5 +173,3 @@ if __name__ == '__main__':
         print(sys.exc_info()[1])
         import traceback
         print(traceback.format_tb(sys.exc_info[2]))
-
-
