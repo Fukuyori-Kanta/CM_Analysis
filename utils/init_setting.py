@@ -134,9 +134,10 @@ def setup_path():
     label_path = os.path.join(root_path, config['PATH']['label_path'])              # ラベル付け結果の保存ファイルパス
     scene_path = os.path.join(root_path, config['PATH']['scene_path'])              # シーン（動画）の保存フォルダパス
     scene_data_path = os.path.join(root_path, config['PATH']['scene_data_path'])    # シーンのデータ（.csv）の保存ファイルパス
+    favo_dir = os.path.join(root_path, config['PATH']['favo_dir'])                  # 好感度の結果フォルダパス
     
     return [root_path, video_path, cmData_top_path, cmData_btm_path, cut_path, cut_img_path, cut_point_path, 
-            noun_label_path, verb_label_path, label_path, scene_path, scene_data_path]
+            noun_label_path, verb_label_path, label_path, scene_path, scene_data_path, favo_dir]
 
 def get_env_data(env_name):
     """設定ファイルから環境設定データを取得する関数
