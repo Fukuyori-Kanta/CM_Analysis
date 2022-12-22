@@ -161,6 +161,7 @@ def create_scene_data(cut_data):
         scene_data.append([video_id, cut_no, cut_range[0], cut_range[1], results_label])
 
     # 最後のデータ追加
+    cut_data[-1][4] = list(map(lambda x: x[0] if isinstance(x, list) else x, cut_data[-1][4]))
     scene_data.append(cut_data[-1])
     
     # 統合による削除対象
@@ -250,14 +251,15 @@ def save_scene(video_id_list, scene_point_dic, video_path, scene_path):
         dest_path = os.path.join(scene_path, video_id) # 各動画のカット分割結果の保存先
         create_dest_folder(dest_path)
         
-        # 動画の読み込み
+        # 動画の読み込み、フレームデータと動画情報を抽出
         frames, video_info = read_video_data(input_video_path)
-        frames = [cv2.cvtColor(frame, cv2.COLOR_RGB2BGR) for frame in frames]   # RGBからBGRに戻す（戻さないと色が反転したまま保存される）
 
-        fps, width, height = video_info # 動画情報（fps, 幅, 高さ）
-        fourcc = 0x00000021             # 動画の保存形式(H264形式でエンコード)
-        writer = []                     # 書き込み用のリスト
-        begin = 0                       # シーン最初のフレーム
+        fps, width, height = video_info # 動画情報（fps, 幅、）
+        fourcc = 0x00000021    # 動画の保存形式(H264形式でエンコード)
+        writer = [] # 書き込み用のリスト
+        begin = 0   # シーン最初のフレーム
+
+        frames = [cv2.cvtColor(frame, cv2.COLOR_RGB2BGR) for frame in frames]   # RGBからBGRに戻す（戻さないと色が反転したまま保存される）
 
         scene_count = len(scene_point) # シーン数
         for i in range(scene_count):
