@@ -63,7 +63,7 @@ def save_cut_img(video_id, cut_point, frames, dest_path):
     logger.debug('保存先 : ' + dest_path)
     logger.debug('-' * 90)
 
-def cut_img_generate(video_path, cut_img_path, cut_point_path):
+def cut_img_generate(video_dir, cut_img_dir, cut_point_path):
     """各カットからカット画像を作成する関数
 
     カット画像 ・・・ 物体認識に使用する画像
@@ -76,10 +76,10 @@ def cut_img_generate(video_path, cut_img_path, cut_point_path):
 
     Parameters
     ----------
-    video_path : str
+    video_dir : str
         入力する動画データのフォルダパス
 
-    cut_img_path : str
+    cut_img_dir : str
         分割したカット画像を保存するフォルダパス
     
     cut_point_path : str
@@ -89,7 +89,7 @@ def cut_img_generate(video_path, cut_img_path, cut_point_path):
     # --------------------------------------------------
     # カット画像の保存先フォルダの作成
     # --------------------------------------------------
-    create_dest_folder(cut_img_path)    # フォルダ作成
+    create_dest_folder(cut_img_dir)    # フォルダ作成
     
     # --------------------------------------------------
     # 動画ID一覧とカット点の読み込み
@@ -102,12 +102,12 @@ def cut_img_generate(video_path, cut_img_path, cut_point_path):
     # --------------------------------------------------
     for video_id, cut_point in zip(video_id_list, cut_point_list):
         file_name = video_id + CUT_EXTENSION    # ファイル名.拡張子
-        input_video_path = os.path.normpath(os.path.join(video_path, file_name)) # 動画ファイルの入力パス 
+        input_video_path = os.path.normpath(os.path.join(video_dir, file_name)) # 動画ファイルの入力パス 
 
         # --------------------------------------------------
         # 保存先フォルダの作成
         # --------------------------------------------------
-        dest_path = os.path.join(cut_img_path, video_id) # 各動画のカット画像作成結果の保存先
+        dest_path = os.path.join(cut_img_dir, video_id) # 各動画のカット画像作成結果の保存先
         create_dest_folder(dest_path)   # フォルダ作成 
         
         # --------------------------------------------------

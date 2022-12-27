@@ -8,6 +8,68 @@ import logging
 # 設定ファイル
 INI_FILE = 'config/settings.ini'
 
+class Path:
+    def __init__(self):
+        """設定ファイルを読み込んでパスを保持するクラス
+        
+        Attributes
+        ----------
+        root_path : str
+            ルートパス
+
+        video_dir : str
+            動画データのパス 
+
+        cmData_top_path : str
+            CMデータ(上位1000)のファイルパス
+
+        cmData_btm_path : str
+            CMデータ(下位1000)のファイルパス
+
+        cut_dir : str
+            カット分割結果の保存フォルダパス
+
+        cut_img_dir : str
+            カット画像作成結果の保存フォルダパス
+
+        cut_point_path : str
+            カット点データ(.csv)の保存ファイルパス
+
+        noun_label_path : str
+            ラベル付け結果(物体検出)の保存ファイルパス
+
+        verb_label_path : str
+            ラベル付け結果(動作認識)の保存ファイルパス
+
+        label_path : str
+            ラベル付け結果の保存ファイルパス
+
+        scene_dir : str
+            シーン(動画)の保存フォルダパス
+
+        scene_data_path : str
+            シーンのデータ(.csv)の保存ファイルパス
+
+        favo_dir : str
+            好感度の結果フォルダパス
+        """
+        # 設定ファイルの読み込み
+        config = read_config(INI_FILE)
+
+        self.root_path = config['PATH']['root_path']
+        self.video_dir = os.path.join(self.root_path, config['PATH']['video_dir'])
+        self.cmData_top_path = os.path.join(self.root_path, config['PATH']['cmData_top_path'])
+        self.cmData_btm_path = os.path.join(self.root_path, config['PATH']['cmData_btm_path'])
+        self.cut_dir = os.path.join(self.root_path, config['PATH']['cut_dir'])
+        self.cut_img_dir = os.path.join(self.root_path, config['PATH']['cut_img_dir'])
+        self.cut_point_path = os.path.join(self.root_path, config['PATH']['cut_point_path'])
+        self.noun_label_path = os.path.join(self.root_path, config['PATH']['noun_label_path'])
+        self.verb_label_path = os.path.join(self.root_path, config['PATH']['verb_label_path'])
+        self.label_path = os.path.join(self.root_path, config['PATH']['label_path'])
+        self.scene_dir = os.path.join(self.root_path, config['PATH']['scene_dir'])
+        self.scene_data_path = os.path.join(self.root_path, config['PATH']['scene_data_path'])
+        self.favo_dir = os.path.join(self.root_path, config['PATH']['favo_dir'])
+
 def read_config(ini_file):
     """iniファイルの読み込み結果を返す関数
 
@@ -19,13 +81,13 @@ def read_config(ini_file):
         root_path = C:\\Users\\[user_name]\\CM_Analysis
 
         ; CMデータパス
-        video_path = data\\movie
+        video_dir = data\\movie
         cmData_top_path = data\\csv\\top1000.csv
         cmData_btm_path = data\\csv\\btm1000.csv
 
         ; 結果格納パス
-        cut_path = result\\cut
-        cut_img_path = result\\cut_img
+        cut_dir = result\\cut
+        cut_img_dir = result\\cut_img
         cut_point_path = result\\cut_point.csv
 
         ; ログ設定
@@ -67,14 +129,10 @@ def setup_logger(mod_name):
     logger : logging.Logger
         ログ設定
     """
-    # --------------------------------------------------
     # 設定ファイルの読み込み
-    # --------------------------------------------------
     config = read_config(INI_FILE)
 
-    # --------------------------------------------------
     # ログの設定
-    # --------------------------------------------------
     root_path = config['PATH']['root_path']                                 # ルートパス
     log_file_path = os.path.join(root_path, config['LOG']['log_file_path']) # ログ出力パス 
     log_dir = os.path.dirname(log_file_path)                                # ログディレクトリ
@@ -104,41 +162,6 @@ def setup_logger(mod_name):
 
     return logger
 
-def setup_path():
-    """設定ファイルからパスを取得して設定する関数
-
-    各パスをリストにまとめて返す
-
-    Returns
-    -------
-    path : list
-        設定したパスのリスト
-    """
-    # --------------------------------------------------
-    # 設定ファイルの読み込み
-    # --------------------------------------------------
-    config = read_config(INI_FILE)
-
-    # --------------------------------------------------
-    # 設定ファイルから値をパスを設定
-    # --------------------------------------------------
-    root_path = config['PATH']['root_path']                                         # ルートパス
-    video_path = os.path.join(root_path, config['PATH']['video_path'])              # 動画データのパス 
-    cmData_top_path = os.path.join(root_path, config['PATH']['cmData_top_path'])    # CMデータ(上位1000)のファイルパス
-    cmData_btm_path = os.path.join(root_path, config['PATH']['cmData_btm_path'])    # CMデータ(下位1000)のファイルパス
-    cut_path = os.path.join(root_path, config['PATH']['cut_path'])                  # カット分割結果の保存フォルダパス
-    cut_img_path = os.path.join(root_path, config['PATH']['cut_img_path'])          # カット画像作成結果の保存フォルダパス
-    cut_point_path = os.path.join(root_path, config['PATH']['cut_point_path'])      # カット点データ（.csv）の保存ファイルパス
-    noun_label_path = os.path.join(root_path, config['PATH']['noun_label_path'])    # ラベル付け結果（物体検出）の保存ファイルパス
-    verb_label_path = os.path.join(root_path, config['PATH']['verb_label_path'])    # ラベル付け結果（動作認識）の保存ファイルパス
-    label_path = os.path.join(root_path, config['PATH']['label_path'])              # ラベル付け結果の保存ファイルパス
-    scene_path = os.path.join(root_path, config['PATH']['scene_path'])              # シーン（動画）の保存フォルダパス
-    scene_data_path = os.path.join(root_path, config['PATH']['scene_data_path'])    # シーンのデータ（.csv）の保存ファイルパス
-    favo_dir = os.path.join(root_path, config['PATH']['favo_dir'])                  # 好感度の結果フォルダパス
-    
-    return [root_path, video_path, cmData_top_path, cmData_btm_path, cut_path, cut_img_path, cut_point_path, 
-            noun_label_path, verb_label_path, label_path, scene_path, scene_data_path, favo_dir]
-
 def get_env_data(env_name):
     """設定ファイルから環境設定データを取得する関数
 
@@ -152,14 +175,10 @@ def get_env_data(env_name):
     logger : logging.Logger
         ログ設定
     """
-    # --------------------------------------------------
     # 設定ファイルの読み込み
-    # --------------------------------------------------
     config = read_config(INI_FILE)
 
-    # --------------------------------------------------
     # 設定ファイルから値を環境データを取得
-    # --------------------------------------------------
     # 物体検出用の環境
     if env_name == 'OBJECT_DET_ENV':
         object_detection_env = config[env_name]['object_detection_env']     # conda環境名

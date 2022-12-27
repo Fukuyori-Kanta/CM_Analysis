@@ -221,7 +221,7 @@ def calc_scene_point(scene_data):
     
     return scene_point_dic   
 
-def save_scene(video_id_list, scene_point_dic, video_path, scene_path):
+def save_scene(video_id_list, scene_point_dic, video_dir, scene_dir):
     """動画を分割して保存する関数
 
     Parameters
@@ -232,23 +232,23 @@ def save_scene(video_id_list, scene_point_dic, video_path, scene_path):
     scene_point_dic : dict
         シーン分割点（フレーム番号）の辞書 {動画ID: エンドフレームのリスト}
     
-    video_path : str
+    video_dir : str
         動画データが存在するフォルダパス
 
-    scene_path : str
+    scene_dir : str
         シーン分割結果（動画）を保存するフォルダパス
     """
     # シーン保存先のフォルダを作成
-    create_dest_folder(scene_path)
+    create_dest_folder(scene_dir)
 
     # シーン保存
     for video_id in video_id_list:
         file_name = video_id + EXTENSION    # ファイル名.拡張子
-        input_video_path = os.path.normpath(os.path.join(video_path, file_name)) # 動画ファイルの入力パス
+        input_video_path = os.path.normpath(os.path.join(video_dir, file_name)) # 動画ファイルの入力パス
         scene_point = scene_point_dic[video_id] # シーンの分割点
 
         # 保存先フォルダの作成
-        dest_path = os.path.join(scene_path, video_id) # 各動画のカット分割結果の保存先
+        dest_path = os.path.join(scene_dir, video_id) # 各動画のカット分割結果の保存先
         create_dest_folder(dest_path)
         
         # 動画の読み込み、フレームデータと動画情報を抽出
@@ -273,7 +273,7 @@ def save_scene(video_id_list, scene_point_dic, video_path, scene_path):
         logger.debug('保存先 : ' + dest_path)
         logger.debug('-' * 90)
 
-def scene_integration(cut_point_path, label_path, video_path, scene_path, scene_data_path):
+def scene_integration(cut_point_path, label_path, video_dir, scene_dir, scene_data_path):
     """シーンに統合・保存する関数
 
     [手順]
@@ -291,10 +291,10 @@ def scene_integration(cut_point_path, label_path, video_path, scene_path, scene_
     label_path : str
         ラベルデータ（.csv）のファイルパス
 
-    video_path : str
+    video_dir : str
         動画データが存在するフォルダパス
 
-    scene_path : str
+    scene_dir : str
         シーン（動画）の保存フォルダパス
 
     scene_data_path : str
@@ -320,7 +320,7 @@ def scene_integration(cut_point_path, label_path, video_path, scene_path, scene_
     scene_point_dic = calc_scene_point(scene_data)
 
     # シーンを動画として保存
-    save_scene(video_id_list, scene_point_dic, video_path, scene_path)
+    save_scene(video_id_list, scene_point_dic, video_dir, scene_dir)
 
     # シーンデータの保存
     field_name = ['動画ID', 'シーン番号', 'スタートフレーム', 'エンドフレーム', '[ラベルのリスト]']

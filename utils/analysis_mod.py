@@ -1,10 +1,8 @@
 import os
 import ast
 from collections import Counter
-import heapq
 import numpy as np
 import re
-import csv
 
 from utils.init_setting import setup_logger
 from utils.file_io import read_csv, read_favo, write_ranking_data, write_csv, create_dest_folder
@@ -12,26 +10,23 @@ from utils.file_io import read_csv, read_favo, write_ranking_data, write_csv, cr
 # ログ設定
 logger = setup_logger(__name__)
 
-def order_desc(dic, N):
-    # valueでソートしたときの上位N個
-    lists = heapq.nlargest(N, dic.items(), key=lambda x: x[1])
+def shaping_scene_data(scene_data):
+    """シーンデータを整形して返す関数
 
-    new_dict = {}
-    for l in lists:
-        new_dict[l[0]] = l[1]
-    
-    return new_dict
+    Parameters
+    ----------
+    scene_data : list
+        シーンデータ
 
-def shaping_favo_data(scene_data, favo_data, video_id_list):
+    Returns
+    -------
+    scene_dic
+        辞書化したシーンデータ
+        {video_id : [scene_no, start, end, label], [scene_no, start, end, label], ...}
     """
-    好感度データを整形して返す関数
-    """
-    # データの整形（動画IDをキーとした辞書の作成）
-    # シーンデータの整形
-    # {video_id : [scene_no, start, end, label], [scene_no, start, end, label], ...}
-    prev_id = scene_data[0][0]   # 前データのID
-    scene_dic = {}  # 動画IDごとにシーンデータを辞書化
-    l = []
+    scene_dic = {}              # 動画IDごとにシーンデータを辞書化
+    prev_id = scene_data[0][0]  # 前データのID
+    values = []
     for data in scene_data:
         video_id = data[0]      # 動画ID
         scene_no = data[1]      # シーン番号
@@ -39,42 +34,161 @@ def shaping_favo_data(scene_data, favo_data, video_id_list):
         end = int(data[3])      # エンドフレーム
         label = ast.literal_eval(data[4])  # ラベルのリスト
 
-        # 前デーのIDと動画IDが違うとき
+        # 前データのIDと動画IDが異なる場合
         if prev_id != video_id:
-            scene_dic[prev_id] = l  # 
+            scene_dic[prev_id] = values
             prev_id = video_id
-            l = []
-        
-        l.append([scene_no, start, end, label])
+            values = []
+        else:
+            values.append([scene_no, start, end, label])
 
         # 最後のデータ
         if scene_data.index(data) == len(scene_data)-1:
-            scene_dic[prev_id] = l
+            scene_dic[prev_id] = values
     
-    # 好感度データの整形
-    # {video_id : [sec, favo], [sec, favo], ...}
-    favo_dic = {}   # 動画IDごとに好感度データを辞書化
-    for data in favo_data:
-        video_id = data[49]     # 動画ID
-        favo_dic[video_id] = [[int(idx+1), float(favo)] for idx, favo in enumerate(data[50:]) if favo != '']
-    
-    return scene_dic, favo_dic
+    return scene_dic
 
 def get_best_favo(start, end, favo_list):
-    """
-    シーン範囲に近い秒数の好感度を返す関数
-    """
-    max_sec = len(favo_list)
-    sec_list = [i*30 for i in range(1, max_sec+1)]
-    start_near_sec = sec_list[np.abs(np.asarray(sec_list) - start).argmin()]
-    end_near_sec = sec_list[np.abs(np.asarray(sec_list) - end).argmin()]
-    near_sec_list =  [start_near_sec+i*30 for i in range((end_near_sec-start_near_sec)//30+1)]
-    candidate_favo = [favo_list[ns//30-1][1] for ns in near_sec_list]
+    """フレーム情報から一番最適な好感度を返す関数
     
+    [手順]
+        1. フレーム範囲から一番近い秒数範囲を算出
+        2. 秒数範囲に該当する好感度の平均を取る
+
+    Parameters
+    ----------
+    start : int
+        開始フレーム
+    
+    end : int
+        終了フレーム
+
+    favo_list : list
+        好感度のリスト（毎秒ごと）
+
+    Returns
+    -------
+    float
+        フレーム範囲付近の好感度の平均値
+    """ 
+    max_sec = len(favo_list)    # 動画秒数
+    fps = 30    # フレームレート
+    sec_list = [i*fps for i in range(1, max_sec+1)] # 秒数（フレーム表記）のリスト
+    start_near_sec = sec_list[np.abs(np.asarray(sec_list) - start).argmin()]    # 一番近い秒数
+    end_near_sec = sec_list[np.abs(np.asarray(sec_list) - end).argmin()]
+    near_sec_range =  [start_near_sec+i*fps for i in range((end_near_sec-start_near_sec)//fps+1)]    # 一番近い秒数範囲
+    candidate_favo = [favo_list[ns//30-1] for ns in near_sec_range] # 該当好感度
+
     # 好感度の平均値を返す
     return round(sum(candidate_favo) / len(candidate_favo), 3)
 
-def ranking(scene_favo_dic, scene_dic, i, result_path):
+def add_favo_to_scene(scene_data, favo_data):
+    """シーンデータに好感度データを付与して返す関数
+    
+    Parameters
+    ----------
+    scene_data : list
+        シーンデータ
+    
+    favo_data : list
+        好感度データ
+
+    Returns
+    -------
+    scene_favo_list : list
+        場面データ [[video_id, scene_no, start, end, [label, ...], best_favo], ....]
+    """ 
+    header, *favo_data = favo_data  # ヘッダーと分離
+    video_id_col = header.index('映像コード')  # 動画IDの列
+    video_id_list = [data[video_id_col] for data in favo_data]  # 動画IDリスト
+
+    # データの整形（動画IDごとに辞書化）
+    favo_dic = {data[video_id_col] : [float(favo) for favo in data[video_id_col+1:] if favo != '']for data in favo_data}    # 好感度データ
+    scene_dic = shaping_scene_data(scene_data)  # シーンデータ
+
+    # 各シーンに好感度を付与
+    scene_favo_list = [] # シーンのリスト
+    for video_id in video_id_list:
+        for sl in scene_dic[video_id]:
+            scene_no = sl[0]    # シーン番号
+            start = sl[1]       # スタートフレーム
+            end = sl[2]         # エンドフレーム
+            labels = sl[3]      # ラベル
+
+            # シーン範囲から最適な好感度を取得
+            best_favo = get_best_favo(start, end, favo_dic[video_id])
+
+            scene_favo_list.append([video_id, scene_no, start, end, labels, best_favo])
+
+    return scene_favo_list
+
+def favo_analysis(cmData_top_path, cmData_btm_path, scene_dir, favo_dir):
+    """ラベル件数を集計して出力する関数
+
+    [手順]
+        1. データの読み込み・前処理
+        2. 場面データに好感度データの追加
+        3. ラベル件数のカウント
+        4. 結果の保存
+
+    Parameters
+    ----------
+    cmData_top_path : str
+        CMデータ(上位1000)のファイルパス
+
+    cmData_btm_path : str
+        CMデータ(下位1000)のファイルパス
+    
+    scene_dir : str
+        シーン(動画)の保存フォルダパス
+
+    favo_dir :str
+        好感度の結果を出力するフォルダパス
+    """
+    # CMデータの取得
+    cmData_top = read_csv(cmData_top_path) # 上位データ
+    cmData_btm = read_csv(cmData_btm_path) # 下位データ
+
+    # 場面データの読み込み
+    scene_data = read_csv(scene_dir, needs_skip_header=True)
+    
+    # 場面データに好感度データを追加
+    top_scene_list = add_favo_to_scene(scene_data, cmData_top)
+    btm_scene_list = add_favo_to_scene(scene_data, cmData_btm)
+
+    # ラベル件数カウント
+    # 上位データ
+    top_all_label = [label for all_scene in top_scene_list for label in all_scene[4]] 
+    top_label_cnt = [[c[0], int(c[1])] for c in Counter(top_all_label).most_common()]
+    top_verb_label = [data for data in top_all_label if data[0].islower()]
+    top_verb_cnt = [[c[0], int(c[1])] for c in Counter(top_verb_label).most_common()]
+    result_txt = (
+        f'シーン件数: {len(top_scene_list)}, ラベル件数: {len(top_all_label)}(動作ラベル: {len(top_verb_cnt)}), '
+        f'総秒数: {sum([int(data[3]) for data, n_data in zip(top_scene_list, top_scene_list[1:]) if n_data[2] == 0] + [top_scene_list[-1][3]]) // 30} 秒'
+    )
+    logger.debug(result_txt)
+
+    # 下位データ
+    btm_all_label = [label for all_scene in btm_scene_list for label in all_scene[4]] 
+    btm_label_cnt = [[c[0], int(c[1])] for c in Counter(btm_all_label).most_common()]
+    btm_verb_label = [data for data in btm_all_label if data[0].islower()]
+    btm_verb_cnt = [[c[0], int(c[1])] for c in Counter(btm_verb_label).most_common()]
+    result_txt = (
+        f'シーン件数: {len(btm_scene_list)}, ラベル件数: {len(btm_all_label)}(動作ラベル: {len(btm_verb_cnt)}),'
+        f'総秒数: {sum([int(data[3]) for data, n_data in zip(btm_scene_list, btm_scene_list[1:]) if n_data[2] == 0] + [btm_scene_list[-1][3]]) // 30} 秒'
+    )
+    logger.debug(result_txt)
+
+    # 結果フォルダを作成
+    create_dest_folder(favo_dir)
+
+    # CSVファイルに保存
+    write_csv(top_scene_list, os.path.normpath(os.path.join(favo_dir, 'top_scene_data.csv')))
+    write_csv(btm_scene_list, os.path.normpath(os.path.join(favo_dir, 'btm_scene_data.csv')))
+    write_csv(top_label_cnt, os.path.normpath(os.path.join(favo_dir, 'top_labels.csv')))
+    write_csv(btm_label_cnt, os.path.normpath(os.path.join(favo_dir, 'btm_labels.csv')))
+    write_csv(top_verb_cnt, os.path.normpath(os.path.join(favo_dir, 'top_verb.csv')))
+    write_csv(btm_verb_cnt, os.path.normpath(os.path.join(favo_dir, 'btm_verb.csv')))
     # 上位、中位、下位で〇〇シーンに付与されたラベル上位10件を出力
     dic_len = len(scene_favo_dic)   # 総シーン数
     all_favo = order_desc(scene_favo_dic, dic_len)   # 好感度の降順
@@ -153,92 +267,3 @@ def ranking(scene_favo_dic, scene_dic, i, result_path):
         
         output_path = os.path.normpath(os.path.join(result_path, file_name))
         write_ranking_data(data[num], output_path, num)
-
-def add_favo_to_scene(scene_data, favo_data):
-    video_id_list = [data[49] for data in favo_data]
-
-    # データの整形
-    scene_dic, favo_dic = shaping_favo_data(scene_data, favo_data, video_id_list)
-    
-    # 各シーンに好感度を付与
-    scene_favo_list = [] # シーンのリスト
-    for video_id in video_id_list:
-        favo_list = favo_dic[video_id]
-        scene_list = scene_dic[video_id]
-
-        for sl in scene_list:
-            scene_no = sl[0]    # シーン番号
-            start = sl[1]       # スタートフレーム
-            end = sl[2]         # エンドフレーム
-            labels = sl[3]      # ラベル
-
-            # シーン範囲から最適な好感度を取得
-            best_favo = get_best_favo(start, end, favo_list)
-
-            scene_favo_list.append([video_id, scene_no, start, end, labels, best_favo])
-
-    return scene_favo_list
-
-def get_label_count(scene_list):
-    print(scene_list[:10])
-    all_label = []  # 全ラベルのデータ
-    for all_scene in scene_list:
-        label = [s for s in all_scene[4]] # 個数削除
-        all_label += label
-    
-    # 総ラベル件数辞書 {'女性' : 3112, '男性' : 2362, ...}
-    label_cnt = [[c[0], int(c[1])] for c in Counter(all_label).most_common()]
-
-    verv = [data for data in all_label if data[0].islower()]    # 
-    #top_label_cnt_verv = [[c[0], int(c[1])] for c in Counter(verv).most_common()]
-    # write_csv(top_label_cnt_verv, r'result\top_verv_labels.csv')
-
-    print(f'シーン件数: {len(scene_list)}, ラベル件数: {len(all_label)}(動作ラベル: {len(verv)}), 総秒数: {sum([int(data[3]) for data, n_data in zip(scene_list, scene_list[1:]) if n_data[2] == 0] + [scene_list[-1][3]]) // 30} 秒')
-
-    return label_cnt
-
-def favo_analysis(cmData_top_path, cmData_btm_path, scene_path, favo_dir):
-    # CMデータの取得
-    cmData_top = read_csv(cmData_top_path, needs_skip_header=True) # 上位データ
-    cmData_btm = read_csv(cmData_btm_path, needs_skip_header=True) # 下位データ
-    
-    # 場面データの読み込み
-    scene_data = read_csv(scene_path, True)
-    
-    # 場面データに好感度データを追加
-    top_scene_list = add_favo_to_scene(scene_data, cmData_top)
-    btm_scene_list = add_favo_to_scene(scene_data, cmData_btm)
-
-    # ラベル件数カウント
-    # 上位データ
-    top_all_label = [label for all_scene in top_scene_list for label in all_scene[4]] 
-    top_label_cnt = [[c[0], int(c[1])] for c in Counter(top_all_label).most_common()]
-    top_verv_label = [data for data in top_all_label if data[0].islower()]
-    top_verv_cnt = [[c[0], int(c[1])] for c in Counter(top_verv_label).most_common()]
-    result_txt = (
-        f'シーン件数: {len(top_scene_list)}, ラベル件数: {len(top_all_label)}(動作ラベル: {len(top_verv_cnt)}), '
-        f'総秒数: {sum([int(data[3]) for data, n_data in zip(top_scene_list, top_scene_list[1:]) if n_data[2] == 0] + [top_scene_list[-1][3]]) // 30} 秒'
-    )
-    logger.debug(result_txt)
-
-    # 下位データ
-    btm_all_label = [label for all_scene in btm_scene_list for label in all_scene[4]] 
-    btm_label_cnt = [[c[0], int(c[1])] for c in Counter(btm_all_label).most_common()]
-    btm_verv_label = [data for data in btm_all_label if data[0].islower()]
-    btm_verv_cnt = [[c[0], int(c[1])] for c in Counter(btm_verv_label).most_common()]
-    result_txt = (
-        f'シーン件数: {len(btm_scene_list)}, ラベル件数: {len(btm_all_label)}(動作ラベル: {len(btm_verv_cnt)}),'
-        f'総秒数: {sum([int(data[3]) for data, n_data in zip(btm_scene_list, btm_scene_list[1:]) if n_data[2] == 0] + [btm_scene_list[-1][3]]) // 30} 秒'
-    )
-    logger.debug(result_txt)
-
-    # 結果フォルダを作成
-    create_dest_folder(favo_dir)
-
-    # CSVファイルに保存
-    write_csv(top_scene_list, os.path.normpath(os.path.join(favo_dir, 'top_scene_data.csv')))
-    write_csv(btm_scene_list, os.path.normpath(os.path.join(favo_dir, 'btm_scene_data.csv')))
-    write_csv(top_label_cnt, os.path.normpath(os.path.join(favo_dir, 'top_labels.csv')))
-    write_csv(btm_label_cnt, os.path.normpath(os.path.join(favo_dir, 'btm_labels.csv')))
-    write_csv(top_verv_cnt, os.path.normpath(os.path.join(favo_dir, 'top_verv.csv')))
-    write_csv(btm_verv_cnt, os.path.normpath(os.path.join(favo_dir, 'btm_verv.csv')))
