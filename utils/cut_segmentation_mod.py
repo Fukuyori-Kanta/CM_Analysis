@@ -527,7 +527,7 @@ def save_cut(video_id, cut_point, frames, video_info, dest_path):
     # save_graph_path = os.path.normpath(os.path.join(dest_path, 'change_rate_graph.jpg'))
     # save_diff_rate_graph(diff_rates, save_graph_path)
 
-def cut_segmentation(video_id_list, video_path, cut_path, cut_point_path):
+def cut_segmentation(video_id_list, video_dir, cut_dir, cut_point_path):
     """カット分割を行い、各カットをフォルダに保存する関数
     
     [手順]
@@ -541,10 +541,10 @@ def cut_segmentation(video_id_list, video_path, cut_path, cut_point_path):
     video_id_list: list
         処理対象の動画リスト
 
-    video_path : str
+    video_dir : str
         動画データが存在するフォルダパス
 
-    cut_path : str
+    cut_dir : str
         カット分割結果（動画）を保存するフォルダパス
     
     cut_point_path : str
@@ -553,7 +553,7 @@ def cut_segmentation(video_id_list, video_path, cut_path, cut_point_path):
     # --------------------------------------------------
     # カットの保存先フォルダの作成
     # --------------------------------------------------
-    create_dest_folder(cut_path)    # フォルダ作成
+    create_dest_folder(cut_dir)    # フォルダ作成
     
     # --------------------------------------------------
     # カット分割
@@ -561,12 +561,12 @@ def cut_segmentation(video_id_list, video_path, cut_path, cut_point_path):
     cut_point_list = [] # カット点のリスト
     for video_id in video_id_list:
         file_name = video_id + EXTENSION    # ファイル名.拡張子
-        input_video_path = os.path.normpath(os.path.join(video_path, file_name)) # 動画ファイルの入力パス 
+        input_video_path = os.path.normpath(os.path.join(video_dir, file_name)) # 動画ファイルの入力パス 
 
         # --------------------------------------------------
         # 保存先フォルダの作成
         # --------------------------------------------------
-        dest_path = os.path.normpath(os.path.join(cut_path, video_id))  # 各動画のカット分割結果の保存先
+        dest_path = os.path.normpath(os.path.join(cut_dir, video_id))  # 各動画のカット分割結果の保存先
         create_dest_folder(dest_path, is_create_newly=True)             # フォルダ新規作成 
         
         # --------------------------------------------------
